@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Pandas 入门指南">
+
+
+
+
+  <meta name="keywords" content="pandas, DataLimbo">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2017/08/23/the-guide-for-pandas/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Pandas 入门指南 - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Pandas 入门指南
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-08-23
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/python/">python</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一-数据生成"><span class="toc-text">一.数据生成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-数据检查"><span class="toc-text">二.数据检查</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三-数据选取"><span class="toc-text">三.数据选取</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-iloc"><span class="toc-text">3.1 iloc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-loc"><span class="toc-text">3.2 loc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-Label-based-Index-based-indexing-using-loc"><span class="toc-text">3.2.1 Label-based / Index-based indexing using .loc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-Boolean-Logical-indexing-using-loc"><span class="toc-text">3.2.2 Boolean / Logical indexing using .loc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3-通过loc更改数据"><span class="toc-text">3.2.3 通过loc更改数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-ix"><span class="toc-text">3.3 ix</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四-数据清洗，预处理"><span class="toc-text">四.数据清洗，预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-删除或填充空值"><span class="toc-text">4.1 删除或填充空值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-清理操作"><span class="toc-text">4.2 清理操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-更改数据格式"><span class="toc-text">4.3 更改数据格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-更改列名称"><span class="toc-text">4.4 更改列名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-删除重复值"><span class="toc-text">4.5 删除重复值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-数值修改及替换"><span class="toc-text">4.6 数值修改及替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-df合并"><span class="toc-text">4.7 df合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-排序"><span class="toc-text">4.8 排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-9-数据分组"><span class="toc-text">4.9 数据分组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-0-数据分列"><span class="toc-text">5.0 数据分列</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五-数据筛选"><span class="toc-text">五.数据筛选</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#六-数据汇总与分析"><span class="toc-text">六.数据汇总与分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-合并"><span class="toc-text">6.1 合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-数据分析"><span class="toc-text">6.2 数据分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#八-数据图表与输出"><span class="toc-text">八.数据图表与输出</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>接触pandas有一段时间了，学习的比较零碎，下面这篇博客是零碎的拼接，源自我看过的一些博文和书籍，绘制一个入门指南。</p>
+<p>目录结构：</p>
+<ol>
+<li>数据生成</li>
+<li>数据检查</li>
+<li>数据选取</li>
+<li>数据清洗，预处理</li>
+<li>数据筛选</li>
+<li>数据汇总与分析</li>
+<li>数据图表与输出</li>
+</ol>
+<a id="more"></a>
+<h1 id="一-数据生成"><a href="#一-数据生成" class="headerlink" title="一.数据生成"></a>一.数据生成</h1><p>可以生成数据的方案很多：</p>
+<ul>
+<li>dict/list</li>
+<li>任何数据库(做下简单转换即可）</li>
+<li>web/URL</li>
+<li>csv/excel</li>
+<li>等…</li>
+</ul>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035629758470.jpg" alt=""></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035630699595.jpg" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># mysql result to pandas</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_pandas</span><span class="params">(rs)</span>:</span></span><br><span class="line">    res = rs.fetchall()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> res:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">    df = DataFrame(res)</span><br><span class="line">    df.columns = rs.keys()</span><br><span class="line">    <span class="keyword">return</span> df</span><br><span class="line">    </span><br><span class="line"><span class="comment"># mongodb to pandas</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_data</span><span class="params">(cursor)</span>:</span></span><br><span class="line">    df =  pd.DataFrame(list(cursor))</span><br><span class="line">    <span class="keyword">return</span> df</span><br><span class="line">    </span><br><span class="line"><span class="comment"># redis get/set pandas</span></span><br><span class="line"><span class="comment"># set</span></span><br><span class="line">redisConn.set(<span class="string">"key"</span>, df.to_msgpack(compress=<span class="string">'zlib'</span>))</span><br><span class="line"><span class="comment"># get</span></span><br><span class="line">pd.read_msgpack(redisConn.get(<span class="string">"key"</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035644310631.jpg" alt=""></p>
+<p>下面以这个例子展开：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(&#123;<span class="string">"id"</span>:[<span class="number">1001</span>,<span class="number">1002</span>,<span class="number">1003</span>,<span class="number">1004</span>,<span class="number">1005</span>,<span class="number">1006</span>], </span><br><span class="line">                   <span class="string">"date"</span>:pd.date_range(<span class="string">'20130102'</span>, periods=<span class="number">6</span>),</span><br><span class="line">                   <span class="string">"city"</span>:[<span class="string">'Beijing '</span>, <span class="string">'SH'</span>, <span class="string">' guangzhou '</span>, <span class="string">'Shenzhen'</span>, <span class="string">'shanghai'</span>, <span class="string">'BEIJING '</span>],</span><br><span class="line">                   <span class="string">"age"</span>:[<span class="number">23</span>,<span class="number">44</span>,<span class="number">54</span>,<span class="number">32</span>,<span class="number">34</span>,<span class="number">32</span>],</span><br><span class="line">                   <span class="string">"category"</span>:[<span class="string">'100-A'</span>,<span class="string">'100-B'</span>,<span class="string">'110-A'</span>,<span class="string">'110-C'</span>,<span class="string">'210-A'</span>,<span class="string">'130-F'</span>],</span><br><span class="line">                   <span class="string">"price"</span>:[<span class="number">1200</span>,np.nan,<span class="number">2133</span>,<span class="number">5433</span>,np.nan,<span class="number">4432</span>]&#125;,</span><br><span class="line">                   columns =[<span class="string">'id'</span>,<span class="string">'date'</span>,<span class="string">'city'</span>,<span class="string">'category'</span>,<span class="string">'age'</span>,<span class="string">'price'</span>])</span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035646917393.jpg" alt=""></p>
+<h1 id="二-数据检查"><a href="#二-数据检查" class="headerlink" title="二.数据检查"></a>二.数据检查</h1><ul>
+<li>数据维度</li>
+<li>数据表信息</li>
+<li>数据格式</li>
+<li>查看空值</li>
+<li>查看唯一值</li>
+<li>查看数据表数值</li>
+<li>查看列名称</li>
+<li>取样</li>
+</ul>
+<p><code>shape</code>属性查看维度：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.shape</span><br><span class="line">(<span class="number">6</span>, <span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+<p><code>info()</code>方法查看整个数据表信息如维度，大小，列名，格式等</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">4</span>]: df.info()</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">pandas</span>.<span class="title">core</span>.<span class="title">frame</span>.<span class="title">DataFrame</span>'&gt;</span></span><br><span class="line"><span class="class"><span class="title">RangeIndex</span>:</span> <span class="number">6</span> entries, <span class="number">0</span> to <span class="number">5</span></span><br><span class="line">Data columns (total <span class="number">6</span> columns):</span><br><span class="line">id          <span class="number">6</span> non-null int64</span><br><span class="line">date        <span class="number">6</span> non-null datetime64[ns]</span><br><span class="line">city        <span class="number">6</span> non-null object</span><br><span class="line">category    <span class="number">6</span> non-null object</span><br><span class="line">age         <span class="number">6</span> non-null int64</span><br><span class="line">price       <span class="number">4</span> non-null float64</span><br><span class="line">dtypes: datetime64[ns](<span class="number">1</span>), float64(<span class="number">1</span>), int64(<span class="number">2</span>), object(<span class="number">2</span>)</span><br><span class="line">memory usage: <span class="number">368.0</span>+ bytes</span><br></pre></td></tr></table></figure>
+<p><code>df.dtypes</code> 查看数据表格式</p>
+<p><code>isnull()</code> 查看空值(true,false表示)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.isnull()</span><br><span class="line">df[<span class="string">'price'</span>].isnull()</span><br></pre></td></tr></table></figure>
+<p><code>unique()</code> 查看指定列的唯一值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">12</span>]: df.city.unique()</span><br><span class="line">Out[<span class="number">12</span>]: array([<span class="string">'Beijing '</span>, <span class="string">'SH'</span>, <span class="string">' guangzhou '</span>, <span class="string">'Shenzhen'</span>, <span class="string">'shanghai'</span>, <span class="string">'BEIJING '</span>], dtype=object)</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: df[<span class="string">'city'</span>].unique()</span><br><span class="line">Out[<span class="number">13</span>]: array([<span class="string">'Beijing '</span>, <span class="string">'SH'</span>, <span class="string">' guangzhou '</span>, <span class="string">'Shenzhen'</span>, <span class="string">'shanghai'</span>, <span class="string">'BEIJING '</span>], dtype=object)</span><br></pre></td></tr></table></figure>
+<p><code>df.values</code>查看数据表的值</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035655579542.jpg" alt=""></p>
+<p><code>df.columns</code>查看列</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">16</span>]: df.columns</span><br><span class="line">Out[<span class="number">16</span>]: Index([<span class="string">'id'</span>, <span class="string">'date'</span>, <span class="string">'city'</span>, <span class="string">'category'</span>, <span class="string">'age'</span>, <span class="string">'price'</span>], dtype=<span class="string">'object'</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="三-数据选取"><a href="#三-数据选取" class="headerlink" title="三.数据选取"></a>三.数据选取</h1><p>涉及方法：</p>
+<ul>
+<li>iloc: 通过行号选取</li>
+<li>loc：通过label或者条件语句选取</li>
+<li>ix：组合选取</li>
+</ul>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035799290994.png" alt=""></p>
+<p>下面通过这个<a href="https://s3-eu-west-1.amazonaws.com/shanebucket/downloads/uk-500.csv" target="_blank" rel="noopener">csv文件作为数据源</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">data = pd.read_csv(<span class="string">'https://s3-eu-west-1.amazonaws.com/shanebucket/downloads/uk-500.csv'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成id字段</span></span><br><span class="line">data[<span class="string">'id'</span>] = [random.randint(<span class="number">0</span>, <span class="number">1000</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(data.shape[<span class="number">0</span>])]</span><br><span class="line">data.head(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035803161098.jpg" alt=""></p>
+<h2 id="3-1-iloc"><a href="#3-1-iloc" class="headerlink" title="3.1 iloc"></a>3.1 iloc</h2><p>“iloc” in pandas is used to select rows and columns by number, <code>data.shape[0]</code> as row number total, <code>data.shape[1]</code> as column number total.</p>
+<blockquote>
+<p><code>[x,y]</code> goes from x to y-1</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 行查询</span></span><br><span class="line">data.iloc[<span class="number">-1</span>] <span class="comment"># 选择最后一行。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 列查询</span></span><br><span class="line">data.iloc[:,列的索引]  <span class="comment"># 查看指定列</span></span><br><span class="line">data.iloc[:,<span class="number">0</span>]      <span class="comment"># 第一列的所有数据 (first_name)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多行多列查询</span></span><br><span class="line">data.iloc[<span class="number">0</span>:<span class="number">5</span>]  <span class="comment"># 0~5行</span></span><br><span class="line">data.iloc[:, <span class="number">0</span>:<span class="number">2</span>] <span class="comment"># 0~2列 (first_name, last_name)</span></span><br><span class="line">data.iloc[<span class="number">0</span>:<span class="number">5</span>, <span class="number">0</span>:<span class="number">2</span>] <span class="comment"># 前5行的前两列 (first_name, last_name)</span></span><br><span class="line">data.iloc[[<span class="number">0</span>,<span class="number">3</span>,<span class="number">6</span>], [<span class="number">0</span>,<span class="number">1</span>]]  <span class="comment"># 第1，4，7行中第1，2列(first_name, last_name)</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035805873926.jpg" alt=""></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035810958838.jpg" alt=""></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035814909399.jpg" alt=""></p>
+<p>注意：当只有一行选择时返回的是Series类型：</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035817876237.jpg" alt=""></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035818689985.jpg" alt=""></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035819138327.jpg" alt=""></p>
+<h2 id="3-2-loc"><a href="#3-2-loc" class="headerlink" title="3.2 loc"></a>3.2 loc</h2><p>loc有如下两个用例：</p>
+<ol>
+<li>通过<code>label/index</code> 选择行</li>
+<li>通过<code>boolean / conditional lookup</code> 选择行</li>
+</ol>
+<h3 id="3-2-1-Label-based-Index-based-indexing-using-loc"><a href="#3-2-1-Label-based-Index-based-indexing-using-loc" class="headerlink" title="3.2.1 Label-based / Index-based indexing using .loc"></a>3.2.1 Label-based / Index-based indexing using .loc</h3><p>对于第一种 Label-based / Index-based ，通过<code>df.set_index()</code> 设置索引，<code>.loc</code>方法直接基于索引值来选取，如下设置last_name 为索引：</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035893223646.jpg" alt=""></p>
+<p>接下来就可以基于index选择了。</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035895870503.jpg" alt=""></p>
+<p>可以选择多个：<code>data.loc[[&#39;Andrade&#39;, &#39;Veness&#39;]]</code></p>
+<p>提供列名的话可选择指定的列，如下：</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035897825553.jpg" alt=""></p>
+<p>也可以使用<code>:</code>切片选择一组，都是开区间，如下：</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-24-15035900370531.jpg" alt=""></p>
+<p>我们改变下index基于id列作为索引：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data.set_index(<span class="string">'id'</span>, inplace=<span class="keyword">True</span>)</span><br><span class="line"><span class="comment"># select the row with 'id' = 487</span></span><br><span class="line">data.loc[<span class="number">487</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>要注意的是：</strong></p>
+<blockquote>
+<p><code>data.loc[487]</code> (the row with index value 487) is not equal to <code>data.iloc[487]</code> (the 487th row in the data).</p>
+</blockquote>
+<h3 id="3-2-2-Boolean-Logical-indexing-using-loc"><a href="#3-2-2-Boolean-Logical-indexing-using-loc" class="headerlink" title="3.2.2 Boolean / Logical indexing using .loc"></a>3.2.2 Boolean / Logical indexing using .loc</h3><p>通过<code>data.loc[&lt;selection&gt;]</code>设置带有布尔数组的条件选择来选取数据，同样拿上面以last_name作为索引的数据为例，查找first_name为Evan的数据：</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035906674295.jpg" alt=""></p>
+<p>原理就是selection 如：<code>data[&#39;first_name&#39;] == &#39;Evan&#39;</code> 返回包含所有index对应的True,False的Series对象，然后<code>loc</code>基于True的位置找到对应的一行数据。</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035908841477.jpg" alt=""></p>
+<p>同样，第二个参数用于选取指定的列：</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035909758966.jpg" alt=""></p>
+<p>注意，当选取一个列时返回Series，用<code>[]</code>包起来则是DataFrame</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035910490322.png" alt=""></p>
+<p>其他实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Select rows where the email column ends with 'hotmail.com', include all columns</span></span><br><span class="line">data.loc[data[<span class="string">'email'</span>].str.endswith(<span class="string">"hotmail.com"</span>)]  </span><br><span class="line"></span><br><span class="line"><span class="comment"># Select rows with last_name equal to some values, all columns</span></span><br><span class="line">data.loc[data[<span class="string">'first_name'</span>].isin([<span class="string">'France'</span>, <span class="string">'Tyisha'</span>, <span class="string">'Eric'</span>])]    </span><br><span class="line"></span><br><span class="line"><span class="comment"># Select rows with first name Antonio AND hotmail email addresses</span></span><br><span class="line">data.loc[data[<span class="string">'email'</span>].str.endswith(<span class="string">"gmail.com"</span>) &amp; (data[<span class="string">'first_name'</span>] == <span class="string">'Antonio'</span>)] </span><br><span class="line"></span><br><span class="line"><span class="comment"># select rows with id column between 100 and 200, and just return 'postal' and 'web' columns</span></span><br><span class="line">data.loc[(data[<span class="string">'id'</span>] &gt; <span class="number">100</span>) &amp; (data[<span class="string">'id'</span>] &lt;= <span class="number">200</span>), [<span class="string">'postal'</span>, <span class="string">'web'</span>]] </span><br><span class="line"></span><br><span class="line"><span class="comment"># A lambda function that yields True/False values can also be used.</span></span><br><span class="line"><span class="comment"># Select rows where the company name has 4 words in it.</span></span><br><span class="line">data.loc[data[<span class="string">'company_name'</span>].apply(<span class="keyword">lambda</span> x: len(x.split(<span class="string">' '</span>)) == <span class="number">4</span>)] </span><br><span class="line"></span><br><span class="line"><span class="comment"># Selections can be achieved outside of the main .loc for clarity:</span></span><br><span class="line"><span class="comment"># Form a separate variable with your selections:</span></span><br><span class="line">idx = data[<span class="string">'company_name'</span>].apply(<span class="keyword">lambda</span> x: len(x.split(<span class="string">' '</span>)) == <span class="number">4</span>)</span><br><span class="line"><span class="comment"># Select only the True values in 'idx' and only the 3 columns specified:</span></span><br><span class="line">data.loc[idx, [<span class="string">'email'</span>, <span class="string">'first_name'</span>, <span class="string">'company'</span>]]</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-3-通过loc更改数据"><a href="#3-2-3-通过loc更改数据" class="headerlink" title="3.2.3 通过loc更改数据"></a>3.2.3 通过loc更改数据</h3><p><img src="http://beginman.qiniudn.com/2017-08-25-15035919665907.jpg" alt=""></p>
+<p>当然我们也可以更改多个</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035921003183.jpg" alt=""></p>
+<h2 id="3-3-ix"><a href="#3-3-ix" class="headerlink" title="3.3 ix"></a>3.3 ix</h2><p>ix是iloc和loc的混合版本，在pandas 0.20.1版本后被废弃，所以我们优先使用iloc和loc，通常ix扮演loc的角色，但是整数类型选择的iloc, 条件就是df的索引不能是整数的。</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035916216389.jpg" alt=""></p>
+<p>可以看出来它的表示并不是很清晰，最好不要用以避免歧义。</p>
+<h1 id="四-数据清洗，预处理"><a href="#四-数据清洗，预处理" class="headerlink" title="四.数据清洗，预处理"></a>四.数据清洗，预处理</h1><p>常见的有：</p>
+<ul>
+<li>删除或填充空值</li>
+<li>清理操作</li>
+<li>更改数据格式</li>
+<li>更改列名称</li>
+<li>删除重复值</li>
+<li>数值修改及替换</li>
+<li>df合并</li>
+<li>排序</li>
+<li>分组</li>
+<li>分列</li>
+</ul>
+<p>数据源：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(&#123;<span class="string">"id"</span>:[<span class="number">1001</span>,<span class="number">1002</span>,<span class="number">1003</span>,<span class="number">1004</span>,<span class="number">1005</span>,<span class="number">1006</span>], </span><br><span class="line">                   <span class="string">"date"</span>:pd.date_range(<span class="string">'20130102'</span>, periods=<span class="number">6</span>),</span><br><span class="line">                   <span class="string">"city"</span>:[<span class="string">'Beijing '</span>, <span class="string">'SH'</span>, <span class="string">' guangzhou '</span>, <span class="string">'Shenzhen'</span>, <span class="string">'shanghai'</span>, <span class="string">'BEIJING '</span>],</span><br><span class="line">                   <span class="string">"age"</span>:[<span class="number">23</span>,<span class="number">44</span>,<span class="number">54</span>,<span class="number">32</span>,<span class="number">34</span>,<span class="number">32</span>],</span><br><span class="line">                   <span class="string">"category"</span>:[<span class="string">'100-A'</span>,<span class="string">'100-B'</span>,<span class="string">'110-A'</span>,<span class="string">'110-C'</span>,<span class="string">'210-A'</span>,<span class="string">'130-F'</span>],</span><br><span class="line">                   <span class="string">"price"</span>:[<span class="number">1200</span>,np.nan,<span class="number">2133</span>,<span class="number">5433</span>,np.nan,<span class="number">4432</span>]&#125;,</span><br><span class="line">                   columns =[<span class="string">'id'</span>,<span class="string">'date'</span>,<span class="string">'city'</span>,<span class="string">'category'</span>,<span class="string">'age'</span>,<span class="string">'price'</span>])</span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035923674375.jpg" alt=""></p>
+<h2 id="4-1-删除或填充空值"><a href="#4-1-删除或填充空值" class="headerlink" title="4.1 删除或填充空值"></a>4.1 删除或填充空值</h2><p>删除涉及 dropna， 填充是fillna</p>
+<p>dropna 语法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">df.dropna(axis=<span class="number">0</span>, how=<span class="string">'any'</span>, thresh=<span class="keyword">None</span>, subset=<span class="keyword">None</span>, inplace=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Parameters</span></span><br><span class="line"><span class="string">----------</span></span><br><span class="line"><span class="string">axis : &#123;0 or 'index', 1 or 'columns'&#125;, or tuple/list thereof</span></span><br><span class="line"><span class="string">    Pass tuple or list to drop on multiple axes</span></span><br><span class="line"><span class="string">how : &#123;'any', 'all'&#125;</span></span><br><span class="line"><span class="string">    * any : if any NA values are present, drop that label</span></span><br><span class="line"><span class="string">    * all : if all values are NA, drop that label</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035926013800.jpg" alt=""></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035927781901.jpg" alt=""></p>
+<p>fillna的语法比较丰富，看文档就行了。这里把NaN填充为0, <code>df.fillna(0)</code></p>
+<h2 id="4-2-清理操作"><a href="#4-2-清理操作" class="headerlink" title="4.2 清理操作"></a>4.2 清理操作</h2><p><code>map</code> 或 <code>apply</code> 操作，如删除空格。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'city'</span>] = df[<span class="string">'city'</span>].map(str.strip)</span><br></pre></td></tr></table></figure>
+<p>大小写转换：</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15035937185993.jpg" alt=""></p>
+<h2 id="4-3-更改数据格式"><a href="#4-3-更改数据格式" class="headerlink" title="4.3 更改数据格式"></a>4.3 更改数据格式</h2><p><code>astype</code>来处理，如将price改成int型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'price'</span>].astype(<span class="string">'int'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="4-4-更改列名称"><a href="#4-4-更改列名称" class="headerlink" title="4.4 更改列名称"></a>4.4 更改列名称</h2><p><code>rename</code>函数，如:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.rename(columns=&#123;<span class="string">'category'</span>: <span class="string">'category-size'</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="4-5-删除重复值"><a href="#4-5-删除重复值" class="headerlink" title="4.5 删除重复值"></a>4.5 删除重复值</h2><p><code>drop_duplicates</code>函数，如果设置keep=’last‘参数，那么第一个被匹配到的重复值被删除，否则最后一个被删除。</p>
+<h2 id="4-6-数值修改及替换"><a href="#4-6-数值修改及替换" class="headerlink" title="4.6 数值修改及替换"></a>4.6 数值修改及替换</h2><p><code>replace</code>函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'city'</span>].replace(<span class="string">'sh'</span>, <span class="string">'shanghai'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="4-7-df合并"><a href="#4-7-df合并" class="headerlink" title="4.7 df合并"></a>4.7 df合并</h2><p><code>merge</code>和 <code>concat</code> 函数用于df合并, 我们常见的一种方式是查询大量mysql数据，然后合并在一块，如下示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sql = <span class="string">"SELECT * FROM users limit 100000"</span></span><br><span class="line">dfs = []</span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> pd.read_sql_query(sql , engine, chunksize=<span class="number">5000</span>):</span><br><span class="line">    dfs.append(chunk)</span><br><span class="line"></span><br><span class="line">df = pd.concat(dfs)</span><br></pre></td></tr></table></figure>
+<p><code>concat</code>适合合并多个df，以append形式合并。<code>merge</code>有点SQL-Like, 如<code>join</code>, <code>left join</code>, <code>right join</code>等操作。下面以df1作为合并的数据源：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">df1=pd.DataFrame(&#123;<span class="string">"id"</span>:[<span class="number">1001</span>,<span class="number">1002</span>,<span class="number">1003</span>,<span class="number">1004</span>,<span class="number">1005</span>,<span class="number">1006</span>,<span class="number">1007</span>,<span class="number">1008</span>], </span><br><span class="line">                  <span class="string">"gender"</span>:[<span class="string">'male'</span>,<span class="string">'female'</span>,<span class="string">'male'</span>,<span class="string">'female'</span>,<span class="string">'male'</span>,<span class="string">'female'</span>,<span class="string">'male'</span>,<span class="string">'female'</span>],</span><br><span class="line">                  <span class="string">"pay"</span>:[<span class="string">'Y'</span>,<span class="string">'N'</span>,<span class="string">'Y'</span>,<span class="string">'Y'</span>,<span class="string">'N'</span>,<span class="string">'Y'</span>,<span class="string">'N'</span>,<span class="string">'Y'</span>,],</span><br><span class="line">                  <span class="string">"m-point"</span>:[<span class="number">10</span>,<span class="number">12</span>,<span class="number">20</span>,<span class="number">40</span>,<span class="number">40</span>,<span class="number">40</span>,<span class="number">30</span>,<span class="number">20</span>]&#125;)</span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036352446384.jpg" alt=""></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036351854941.jpg" alt=""></p>
+<h2 id="4-8-排序"><a href="#4-8-排序" class="headerlink" title="4.8 排序"></a>4.8 排序</h2><p><img src="http://beginman.qiniudn.com/2017-08-25-15036354288254.jpg" alt=""></p>
+<h2 id="4-9-数据分组"><a href="#4-9-数据分组" class="headerlink" title="4.9 数据分组"></a>4.9 数据分组</h2><p><code>where</code> 函数，对数据进行判断和分组, 将符合条件的分为一组，不符合条件的分为另一组</p>
+<p><code>where(条件, 值1，值2)</code> 有点三元运算符的感觉。</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036355792596.jpg" alt=""></p>
+<p>还可以对多个字段的值进行判断后对数据进行分组, 如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df_inner[<span class="string">'group'</span>] = np.where((df_inner[<span class="string">'price'</span>] &gt; <span class="number">3000</span>) &amp; (df_inner[<span class="string">'city'</span>] == <span class="string">'Shenzhen'</span>), <span class="string">'high'</span>, <span class="string">'low'</span>)</span><br></pre></td></tr></table></figure>
+<p>多条件用 <code>()括每个条件 然后 &amp;, | 连接</code>.</p>
+<p><strong>处理where之外，还可以用loc直接修改</strong></p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036367998942.jpg" alt=""></p>
+<h2 id="5-0-数据分列"><a href="#5-0-数据分列" class="headerlink" title="5.0 数据分列"></a>5.0 数据分列</h2><p><img src="http://beginman.qiniudn.com/2017-08-25-15036372045796.jpg" alt=""></p>
+<h1 id="五-数据筛选"><a href="#五-数据筛选" class="headerlink" title="五.数据筛选"></a>五.数据筛选</h1><p>与或非(<code>&amp;,|,!</code>), 如 <code>df.loc[筛选条件]</code>， 对于多个条件则需要用<code>()</code>分别括起来。</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036426757860.jpg" alt=""></p>
+<h1 id="六-数据汇总与分析"><a href="#六-数据汇总与分析" class="headerlink" title="六.数据汇总与分析"></a>六.数据汇总与分析</h1><p>主要用到：</p>
+<ul>
+<li>merge</li>
+<li>group</li>
+</ul>
+<h2 id="6-1-合并"><a href="#6-1-合并" class="headerlink" title="6.1 合并"></a>6.1 合并</h2><p>数据源：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">user_usage = pd.read_csv(<span class="string">'https://raw.githubusercontent.com/shanealynn/Pandas-Merge-Tutorial/master/user_usage.csv'</span>)</span><br><span class="line">user_usage.head(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">user_device = pd.read_csv(<span class="string">'https://raw.githubusercontent.com/shanealynn/Pandas-Merge-Tutorial/master/user_device.csv'</span>)</span><br><span class="line">user_device.head(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">android_devices = pd.read_csv(<span class="string">'https://raw.githubusercontent.com/shanealynn/Pandas-Merge-Tutorial/master/android_devices.csv'</span>)</span><br><span class="line">android_devices.head(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036547035503.jpg" alt=""></p>
+<p>先对<code>use_id</code>作为key进行merge:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># merge user_usage and user_device and add the “device” and “platform” columns to user_usage</span></span><br><span class="line">result = pd.merge(user_usage,</span><br><span class="line">         user_device[[<span class="string">'use_id'</span>, <span class="string">'platform'</span>, <span class="string">'device'</span>]],</span><br><span class="line">         on=<span class="string">'use_id'</span>)</span><br><span class="line">result.head()</span><br><span class="line"></span><br><span class="line"><span class="comment"># user_usage as left</span></span><br><span class="line"><span class="comment"># user_device[['use_id', 'platform', 'device']] as right</span></span><br><span class="line"><span class="comment"># use_id as join key</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036548859500.jpg" alt=""></p>
+<p>来试一试 left join吧。</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036549643264.jpg" alt=""></p>
+<p>果不其然，再试下outer join</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036550164566.jpg" alt=""></p>
+<p>从上述三个例子可以看到 merge操作与SQL join操作基本一样的:</p>
+<ul>
+<li>merge: inner -&gt; sql: inner join</li>
+<li>merge: right -&gt; sql: right join</li>
+<li>merge: left  -&gt; sql: left join</li>
+<li>merge: outer -&gt; sql: full outer join</li>
+</ul>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036551595031.jpg" alt=""></p>
+<p>还可以指定right_on和left_on 来merge:</p>
+<p><img src="http://beginman.qiniudn.com/2017-08-25-15036552270339.jpg" alt=""></p>
+<h2 id="6-2-数据分析"><a href="#6-2-数据分析" class="headerlink" title="6.2 数据分析"></a>6.2 数据分析</h2><ul>
+<li>groupby()</li>
+<li>agg()</li>
+</ul>
+<h1 id="八-数据图表与输出"><a href="#八-数据图表与输出" class="headerlink" title="八.数据图表与输出"></a>八.数据图表与输出</h1><ul>
+<li>to excel</li>
+<li>to csv</li>
+<li>….</li>
+</ul>
+<p>比如写入excel:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df_inner.to_Excel(<span class="string">'my.xlsx'</span>, sheet_name=<span class="string">'demo'</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.shanelynn.ie/select-pandas-dataframe-rows-and-columns-using-iloc-loc-and-ix/#iloc-selection" target="_blank" rel="noopener">Using iloc, loc, &amp; ix to select rows and columns in Pandas DataFrames</a></li>
+<li><a href="http://python.jobbole.com/85742/" target="_blank" rel="noopener">Python数据处理：Pandas模块的 12 种实用技巧</a></li>
+<li><a href="http://www.justinablog.com/archives/1357" target="_blank" rel="noopener">使用Python Pandas处理亿级数据</a> </li>
+<li><a href="https://www.shanelynn.ie/merge-join-dataframes-python-pandas-index-1/" target="_blank" rel="noopener">Merge and Join DataFrames with Pandas in Python</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2017/08/23/the-guide-for-pandas/">http://beginman.cn/2017/08/23/the-guide-for-pandas/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/pandas/">pandas</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/09/29/wtfpython-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">WTF Python(2)</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/10/27/The-Art-of-Readable-Code/">
+        <span class="next-text nav-default">编写可读代码的艺术</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

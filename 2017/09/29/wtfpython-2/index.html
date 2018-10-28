@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="WTF Python(2)">
+
+
+
+
+  <meta name="keywords" content="wtf, DataLimbo">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2017/09/29/wtfpython-2/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> WTF Python(2) - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          WTF Python(2)
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-09-29
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/python/">python</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-字典键的隐式转换"><span class="toc-text">1.字典键的隐式转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-生成器执行时间差异性"><span class="toc-text">2.生成器执行时间差异性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-迭代修改字典"><span class="toc-text">3.迭代修改字典</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-迭代删除列表元素"><span class="toc-text">4.迭代删除列表元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-is的魔法"><span class="toc-text">5. is的魔法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-闭包的影响"><span class="toc-text">6.闭包的影响</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-列表重复N次"><span class="toc-text">7.列表重复N次</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-可变对象做默认参数"><span class="toc-text">8.可变对象做默认参数</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>来源：<a href="https://github.com/satwikkansal/wtfpython" target="_blank" rel="noopener">wtfpython</a>, 摘一些比较有代表性的问题。</p>
+<p>相关文章：</p>
+<ul>
+<li><a href="http://beginman.cn/python/2016/10/14/wtfpython-1/">WTF Python第一弹</a></li>
+<li><a href="http://beginman.cn/python/2015/09/07/python-38-tips/">38个python数据类型小技巧</a></li>
+<li><a href="http://beginman.cn/python/2016/10/15/python-closure/">Python闭包</a></li>
+</ul>
+<a id="more"></a>
+<h2 id="1-字典键的隐式转换"><a href="#1-字典键的隐式转换" class="headerlink" title="1.字典键的隐式转换"></a>1.字典键的隐式转换</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">some_dict = &#123;&#125;</span><br><span class="line">some_dict[<span class="number">5.5</span>] = <span class="string">"Ruby"</span></span><br><span class="line">some_dict[<span class="number">5.0</span>] = <span class="string">"JavaScript"</span></span><br><span class="line">some_dict[<span class="number">5</span>] = <span class="string">"Python"</span></span><br></pre></td></tr></table></figure>
+<p>输出:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_dict[<span class="number">5.5</span>]</span><br><span class="line"><span class="string">"Ruby"</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_dict[<span class="number">5.0</span>]</span><br><span class="line"><span class="string">"Python"</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_dict[<span class="number">5</span>]</span><br><span class="line"><span class="string">"Python"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>解释：5和5.0 在hash过程中被隐式转换，视为同一个key, hash值一样。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">5</span> == <span class="number">5.0</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hash(<span class="number">5</span>) == hash(<span class="number">5.0</span>)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-生成器执行时间差异性"><a href="#2-生成器执行时间差异性" class="headerlink" title="2.生成器执行时间差异性"></a>2.生成器执行时间差异性</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array = [<span class="number">1</span>, <span class="number">8</span>, <span class="number">15</span>]</span><br><span class="line">g = (x <span class="keyword">for</span> x <span class="keyword">in</span> array <span class="keyword">if</span> array.count(x) &gt; <span class="number">0</span>)</span><br><span class="line">array = [<span class="number">2</span>, <span class="number">8</span>, <span class="number">22</span>]</span><br></pre></td></tr></table></figure>
+<p>输出下<code>list(g)</code> 会让你惊讶的。结果是8</p>
+<p>对于生成器的猫腻很多，在上例中<strong><code>in</code>子句在声明时进行计算，但是条件语句在运行时计算</strong>，所以在运行之前，array 被重新赋值为列表 [2, 8, 22]，然后在条件表达式中分别计算 1，8，15的个数大于 0 的，显然只生成了 8。</p>
+<h2 id="3-迭代修改字典"><a href="#3-迭代修改字典" class="headerlink" title="3.迭代修改字典"></a>3.迭代修改字典</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x = &#123;<span class="number">0</span>: <span class="keyword">None</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> x:</span><br><span class="line">    <span class="keyword">del</span> x[i]</span><br><span class="line">    x[i+<span class="number">1</span>] = <span class="keyword">None</span></span><br><span class="line">    print(i)</span><br></pre></td></tr></table></figure>
+<p>在py3中运行4次，打印0,1,2,3,4；在py2中运行8次，打印0,1,2,3,4,5,6,7。在<a href="https://stackoverflow.com/questions/44763802/modifying-a-dictionary-while-iterating-over-it-bug-in-python-dict" target="_blank" rel="noopener">Modifying a dictionary while iterating over it. Bug in Python dict?</a>这个问题中有详细的解释：<strong>迭代一个字典并修改它是不允许的，应为添加或删除时，迭代视图可能会引发RuntimeError或无法遍历所有条目。</strong></p>
+<p><strong>TODO: 这个问题我也没有完全理解</strong></p>
+<p>如果我们在forloop 时直接删除字典元素是不允许的，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">49</span>]: <span class="keyword">for</span> i <span class="keyword">in</span> x:</span><br><span class="line">    ...:     <span class="keyword">del</span> x[i]</span><br><span class="line">    ...:</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">RuntimeError                              Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-49</span>-a5c6e73be64f&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 for i in x:</span><br><span class="line">      <span class="number">2</span>     <span class="keyword">del</span> x[i]</span><br><span class="line">      <span class="number">3</span></span><br><span class="line"></span><br><span class="line">RuntimeError: dictionary changed size during iteration</span><br><span class="line"></span><br><span class="line"><span class="comment"># add</span></span><br><span class="line">In [<span class="number">53</span>]: x = &#123;<span class="number">0</span>: <span class="keyword">None</span>&#125;</span><br><span class="line">    ...:</span><br><span class="line"></span><br><span class="line">In [<span class="number">54</span>]: <span class="keyword">for</span> i <span class="keyword">in</span> x:</span><br><span class="line">    ...:     x[i+<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">    ...:</span><br><span class="line">    ...:</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">RuntimeError                              Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-54</span><span class="number">-8910</span>bbfd056f&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 for i in x:</span><br><span class="line">      <span class="number">2</span>     x[i+<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">      <span class="number">3</span></span><br><span class="line">      <span class="number">4</span></span><br><span class="line"></span><br><span class="line">RuntimeError: dictionary changed size during iteration</span><br></pre></td></tr></table></figure>
+<p>也就是说<strong>在迭代过程中是不能修改字典的长度的</strong>, 而上面的例子是<strong>先删掉后添加，那么这样就没有改变字典长度，但是运行了8次就停止了，也就说删掉一个后添加一个或 添加一个然后删掉一个 是可以的。</strong></p>
+<blockquote>
+<p>It runs eight times because that’s the point at which the dictionary resizes to hold more keys (we have eight deletion entries, so a resize is needed). This is actually an implementation detail.</p>
+</blockquote>
+<h2 id="4-迭代删除列表元素"><a href="#4-迭代删除列表元素" class="headerlink" title="4.迭代删除列表元素"></a>4.迭代删除列表元素</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">list_1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">list_2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">list_3 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">list_4 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> idx, item <span class="keyword">in</span> enumerate(list_1):</span><br><span class="line">    <span class="keyword">del</span> item</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> idx, item <span class="keyword">in</span> enumerate(list_2):</span><br><span class="line">    list_2.remove(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> idx, item <span class="keyword">in</span> enumerate(list_3[:]):</span><br><span class="line">    list_3.remove(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> idx, item <span class="keyword">in</span> enumerate(list_4):</span><br><span class="line">    list_4.pop(idx)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list_1</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list_2</span><br><span class="line">[<span class="number">2</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list_3</span><br><span class="line">[]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list_4</span><br><span class="line">[<span class="number">2</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<p>解释：</p>
+<p><strong>记住，绝不要改变正在迭代的对象。正确方式应该是迭代一个对象的副本，然后修改原对象，如上面的<code>list_3[:]</code>, <code>id(list_3) != id(list_3[:])</code>, 它们不会是一个对象，这样就可以放心修改了。</strong></p>
+<p><code>del</code>, <code>remove</code>, <code>pop</code> 的区别：</p>
+<ul>
+<li><code>del var_name</code> 仅仅是删除一个变量在local或global命名空间的绑定。所以list_1的操作就是迭代一个List元素赋值给变量item, 然后删除这个引用，但是对list内的元素没影响。</li>
+<li><code>remove</code>: 移除第一个匹配的元素</li>
+<li><code>pop</code>: 删除元素并返回</li>
+</ul>
+<p>为什么会输出[2,4]呢？看下边演示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">80</span>]: <span class="keyword">for</span> idx, item <span class="keyword">in</span> enumerate(list_2):</span><br><span class="line">    ...:     print(idx, item)</span><br><span class="line">    ...:     list_2.remove(item)</span><br><span class="line">    ...:</span><br><span class="line">    ...:</span><br><span class="line">    ...:</span><br><span class="line"><span class="number">0</span> <span class="number">1</span></span><br><span class="line"><span class="number">1</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">81</span>]: list_2</span><br><span class="line">Out[<span class="number">81</span>]: [<span class="number">2</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="5-is的魔法"><a href="#5-is的魔法" class="headerlink" title="5. is的魔法"></a>5. is的魔法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">256</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">256</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">257</span>; b = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b =<span class="number">257</span>,<span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>注意在ipython中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">256</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">256</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ipython中这一步不成立</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">257</span>; b = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b =<span class="number">257</span>,<span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>When you start up python the numbers from -5 to 256 will be allocated. These numbers are used a lot, so it makes sense just to have them ready.</p>
+</blockquote>
+<p>但是对于257已经超出了256, 为什么在一行定义的时候它们指向同一内存地址呢？？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">4355865968</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">4355865744</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">257</span>; b = <span class="number">257</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">4355864592</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">4355864592</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a) == id(b)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>When a and b are set to 257 in the same line, the Python interpreter creates a new object, then references the second variable at the same time. If you do it on separate lines, it doesn’t “know” that there’s already 257 as an object.</p>
+</blockquote>
+<p>还有这种操作….:-D</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">10000</span>;b=<span class="number">10000</span>;c=<span class="number">10000</span>;d=<span class="number">10000</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b <span class="keyword">is</span> c <span class="keyword">is</span> d</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="6-闭包的影响"><a href="#6-闭包的影响" class="headerlink" title="6.闭包的影响"></a>6.闭包的影响</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">funcs = []</span><br><span class="line">results = []</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">some_func</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    funcs.append(some_func)</span><br><span class="line">    results.append(some_func())</span><br><span class="line"></span><br><span class="line">funcs_results = [func() <span class="keyword">for</span> func <span class="keyword">in</span> funcs]</span><br></pre></td></tr></table></figure>
+<p>Output:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>results</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>funcs_results</span><br><span class="line">[<span class="number">6</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure>
+<p>或：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>powers_of_x = [<span class="keyword">lambda</span> x: x**i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[f(<span class="number">2</span>) <span class="keyword">for</span> f <span class="keyword">in</span> powers_of_x]</span><br><span class="line">[<span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>]</span><br></pre></td></tr></table></figure>
+<p>详解见：<a href="http://beginman.cn/python/2016/10/15/python-closure/">Python闭包</a></p>
+<h2 id="7-列表重复N次"><a href="#7-列表重复N次" class="headerlink" title="7.列表重复N次"></a>7.列表重复N次</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Let's initialize a row</span></span><br><span class="line">row = [<span class="string">""</span>]*<span class="number">3</span> <span class="comment">#row i['', '', '']</span></span><br><span class="line"><span class="comment"># Let's make a board</span></span><br><span class="line">board = [row]*<span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>Output:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>board</span><br><span class="line">[[<span class="string">''</span>, <span class="string">''</span>, <span class="string">''</span>], [<span class="string">''</span>, <span class="string">''</span>, <span class="string">''</span>], [<span class="string">''</span>, <span class="string">''</span>, <span class="string">''</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>board[<span class="number">0</span>]</span><br><span class="line">[<span class="string">''</span>, <span class="string">''</span>, <span class="string">''</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>board[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"><span class="string">''</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>board[<span class="number">0</span>][<span class="number">0</span>] = <span class="string">"X"</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>board</span><br><span class="line">[[<span class="string">'X'</span>, <span class="string">''</span>, <span class="string">''</span>], [<span class="string">'X'</span>, <span class="string">''</span>, <span class="string">''</span>], [<span class="string">'X'</span>, <span class="string">''</span>, <span class="string">''</span>]]</span><br></pre></td></tr></table></figure>
+<p>可以看出，board的元素都引用了同一内存地址。<code>board</code>由多个<code>row</code>生成的，所以每个元素都是raw的引用，如下内存分配：</p>
+<p><img src="http://beginman.qiniudn.com/2017-09-29-15066900907113.jpg" alt=""></p>
+<h2 id="8-可变对象做默认参数"><a href="#8-可变对象做默认参数" class="headerlink" title="8.可变对象做默认参数"></a>8.可变对象做默认参数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">some_func</span><span class="params">(default_arg=[])</span>:</span></span><br><span class="line">    default_arg.append(<span class="string">"some_string"</span>)</span><br><span class="line">    <span class="keyword">return</span> default_arg</span><br><span class="line"></span><br><span class="line"><span class="comment"># output:</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func()</span><br><span class="line">[<span class="string">'some_string'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func()</span><br><span class="line">[<span class="string">'some_string'</span>, <span class="string">'some_string'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func([])</span><br><span class="line">[<span class="string">'some_string'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func()</span><br><span class="line">[<span class="string">'some_string'</span>, <span class="string">'some_string'</span>, <span class="string">'some_string'</span>]</span><br></pre></td></tr></table></figure>
+<p>这种情况在python中很典型，主要原因就在于<strong>def 语句会立马执行，所以函数的参数就立马初始化，然而每次函数调用时，默认的可变参数不会每次都被初始化。</strong> 来做个小实验</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">default_value = <span class="keyword">lambda</span> :print(<span class="string">'init'</span>)</span><br><span class="line">In [<span class="number">127</span>]: <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(default_arg=default_value<span class="params">()</span>)</span>:</span></span><br><span class="line">     ...:     <span class="keyword">pass</span></span><br><span class="line">     ...:</span><br><span class="line">init</span><br><span class="line"><span class="comment"># 这一步可以看到def语句被执行，同时默认参数会立马被初始化</span></span><br><span class="line"><span class="comment"># 调用该函数,发现没有任何输出</span></span><br><span class="line">In [<span class="number">128</span>]: foo()</span><br><span class="line"><span class="comment"># 如果传递一个参数，则作为新的参数会被初始化</span></span><br><span class="line">In [<span class="number">130</span>]: foo(default_value())</span><br><span class="line">init</span><br></pre></td></tr></table></figure>
+<p>函数的<code>__defaults__</code>属性来显示函数的默认参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func.__defaults__ <span class="comment">#This will show the default argument values for the function</span></span><br><span class="line">([],)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func.__defaults__</span><br><span class="line">([<span class="string">'some_string'</span>],)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func.__defaults__</span><br><span class="line">([<span class="string">'some_string'</span>, <span class="string">'some_string'</span>],)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func([])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>some_func.__defaults__</span><br><span class="line">([<span class="string">'some_string'</span>, <span class="string">'some_string'</span>],)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2017/09/29/wtfpython-2/">http://beginman.cn/2017/09/29/wtfpython-2/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/wtf/">wtf</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/10/26/wtfpython-3/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">WTF Python(3)</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/08/23/the-guide-for-pandas/">
+        <span class="next-text nav-default">Pandas 入门指南</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

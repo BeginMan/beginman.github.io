@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="logstash 性能测试">
+
+
+
+
+  <meta name="keywords" content="logstash, DataLimbo">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2017/12/26/logstash-benchmark-test/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> logstash 性能测试 - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          logstash 性能测试
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-12-26
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/elk/">elk</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基线"><span class="toc-text">基线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#生成测试数据-Generator"><span class="toc-text">生成测试数据(Generator)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用PV进行测试"><span class="toc-text">使用PV进行测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结论"><span class="toc-text">结论</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#增大filter-worker"><span class="toc-text">增大filter worker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#增大batch-size"><span class="toc-text">增大batch-size</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#增大JVM堆内存"><span class="toc-text">增大JVM堆内存</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h1 id="基线"><a href="#基线" class="headerlink" title="基线"></a>基线</h1><p>logstash 分三大块, input, filter, output. 这三快往往存在一些问题，如：</p>
+<ul>
+<li>logstash input  （IO密集，受限网卡和数据源性能等）</li>
+<li>logstash filter (CPU密集，瓶颈容易出在这）</li>
+<li>logstash output (IO密集，受限网卡，写入速度，数据源性能等）</li>
+</ul>
+<a id="more"></a>
+<p>在此之前先要了解现有配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ curl <span class="string">'localhost:9607/_node/pipeline?pretty'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"host"</span> : <span class="string">"hadoop-slave-3"</span>,</span><br><span class="line">  <span class="string">"version"</span> : <span class="string">"5.2.0"</span>,</span><br><span class="line">  <span class="string">"http_address"</span> : <span class="string">"127.0.0.1:9607"</span>,</span><br><span class="line">  <span class="string">"id"</span> : <span class="string">"c6c416c7-d82c-4b71-8153-e2f9fbc0eda2"</span>,</span><br><span class="line">  <span class="string">"name"</span> : <span class="string">"hadoop-master"</span>,</span><br><span class="line">  <span class="string">"pipeline"</span> : &#123;</span><br><span class="line">    <span class="string">"workers"</span> : 8,</span><br><span class="line">    <span class="string">"batch_size"</span> : 125,</span><br><span class="line">    <span class="string">"batch_delay"</span> : 5,</span><br><span class="line">    <span class="string">"config_reload_automatic"</span> : <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"config_reload_interval"</span> : 3</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>对于单一应用性能常受限于： </p>
+<ul>
+<li>系统资源：cpu核数，cpu单核速度，内存，网卡，磁盘 </li>
+<li>应用分配到的硬件资源：分配的cpu核数，分配的系统内存等</li>
+</ul>
+<p>下面的测试仅从filter处理速度来分析</p>
+<h1 id="生成测试数据-Generator"><a href="#生成测试数据-Generator" class="headerlink" title="生成测试数据(Generator)"></a>生成测试数据(Generator)</h1><p>实例：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    generator &#123;</span><br><span class="line">        count =&gt; <span class="number">10000000</span></span><br><span class="line">        message =&gt; <span class="string">'&#123;"key1":"value1","key2":[1,2],"key3":&#123;"subkey1":"subvalue1"&#125;&#125;'</span></span><br><span class="line">        codec =&gt; json</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="使用PV进行测试"><a href="#使用PV进行测试" class="headerlink" title="使用PV进行测试"></a>使用PV进行测试</h1><p>PV 全命为Pipe Viewer，利用它我们可以查看到命令执行的进度。使用 pv 命令配合LogStash::Codecs::Dots</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">output &#123;</span><br><span class="line">    stdout &#123;</span><br><span class="line">        codec =&gt; dots</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    <span class="comment">#stdin &#123;&#125;</span></span><br><span class="line">    generator &#123;</span><br><span class="line">        count =&gt; <span class="number">100000</span></span><br><span class="line">        message =&gt; <span class="string">'2017-12-25/20:54:34.481|-|-|-|^_^|[Thread-5743] INFO  VIEW_LOGGER 262 - view:&#123;"id":"9af4e4df4e2eb","from":"2","uId":1,"uType":"admin","timestamp":1514206474481&#125;'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line">    <span class="comment"># 方案1</span></span><br><span class="line">    grok &#123;</span><br><span class="line">       match =&gt; [<span class="string">"message"</span>, <span class="string">"%&#123;LOGLEVEL&#125; %&#123;DATA&#125; - view:%&#123;GREEDYDATA:body&#125;"</span>] </span><br><span class="line">       add_tag =&gt; [<span class="string">"view"</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    json &#123;</span><br><span class="line">       source =&gt; <span class="string">"body"</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 方案2</span></span><br><span class="line">    <span class="comment">#ruby &#123;</span></span><br><span class="line">    <span class="comment">#    code =&gt; "</span></span><br><span class="line">    <span class="comment">#        if event.get('message').to_s.include?'view'</span></span><br><span class="line">    <span class="comment">#            event.set('datas', event.get('message').split('view:')[1])</span></span><br><span class="line">    <span class="comment">#        else</span></span><br><span class="line">    <span class="comment">#            event.cancel</span></span><br><span class="line">    <span class="comment">#        end</span></span><br><span class="line">    <span class="comment">#    "</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">    json &#123;</span><br><span class="line">       source =&gt; <span class="string">"datas"</span></span><br><span class="line">    &#125;</span><br><span class="line">    date &#123;</span><br><span class="line">        match =&gt; [<span class="string">"timestamp"</span>, <span class="string">"UNIX_MS"</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    mutate &#123;</span><br><span class="line">        remove_field =&gt; [<span class="string">"message"</span>, <span class="string">"datas"</span>, <span class="string">"timestamp"</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123;</span><br><span class="line">    <span class="comment">#stdout &#123; codec =&gt; rubydebug &#125;</span></span><br><span class="line">    stdout &#123;codec =&gt; dots&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ logstash -f switch-line.conf | pv -abt &gt; /dev/null</span><br><span class="line">99.2KiB 0:00:35 [ 2.8KiB/s]</span><br></pre></td></tr></table></figure>
+<p>这里单位是 B/s，但是因为一个 event 就输出一个 <code>.</code> ，也就是 1B。所以 2.8kiB/s 就相当于是 2.8k event/s。</p>
+<p>注释掉上面的方案1，打开方案2，测试发现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ logstash -f switch-line.conf | pv -abt &gt; /dev/null</span><br><span class="line">99.2KiB 0:00:27 [3.56KiB/s]</span><br></pre></td></tr></table></figure>
+<p>显然方案2的处理速度更好些，虽然方案1显得比较直观，但是正则是有点耗时的。</p>
+<p>在方案1，如果我们增大 batch-size, 可能会好点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ logstash -b 5000 -f 5.2.0/switch-line.conf | pv -abt &gt; /dev/null                                                                                                                                </span><br><span class="line">99.8KiB 0:00:30 [3.32KiB/s]</span><br></pre></td></tr></table></figure>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><h2 id="增大filter-worker"><a href="#增大filter-worker" class="headerlink" title="增大filter worker"></a>增大filter worker</h2><p>filter阶段是多线程的，要增大线程数 -w 12</p>
+<p>性能测试, 查看吞吐量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/logstash -f ping_history.conf -w 12 | pv -bt &gt; /dev/null</span><br></pre></td></tr></table></figure>
+<p>增加filter worker数很占用内存和CPU，这里就拿空间换时间吧，所以这里JVM 堆内存要调大点（4倍即可）<br>目前机器上 logstash 默认 8， 即运行 filter 和 output 的 pipeline 线程数量。默认是 CPU 核数, 这里我们可以设置 CPU核数 * 1.5</p>
+<h2 id="增大batch-size"><a href="#增大batch-size" class="headerlink" title="增大batch-size"></a>增大batch-size</h2><p>-b 1000</p>
+<p>增大 woker 的 batch_size, 目前pipeline-batch-size默认125， 可增大点来提升吞吐量。在每个 Logstash pipeline 线程，执行具体的 filter 和 output 函数之前，最多能累积的日志条数。默认是 125 条。越大性能越好，同样也会消耗越多的 JVM 内存。</p>
+<h2 id="增大JVM堆内存"><a href="#增大JVM堆内存" class="headerlink" title="增大JVM堆内存"></a>增大JVM堆内存</h2><p>目前的默认配置如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ cat jvm.options</span><br><span class="line"></span><br><span class="line"><span class="comment">## JVM configuration</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># Xms represents the initial size of total heap space</span></span><br><span class="line"><span class="comment"># Xmx represents the maximum size of total heap space</span></span><br><span class="line"> </span><br><span class="line">-Xms256m</span><br><span class="line">-Xmx1g</span><br></pre></td></tr></table></figure>
+<p>可以适当增大4倍。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2017/12/26/logstash-benchmark-test/">http://beginman.cn/2017/12/26/logstash-benchmark-test/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/logstash/">logstash</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/10/26/wtfpython-3/">
+        <span class="next-text nav-default">WTF Python(3)</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

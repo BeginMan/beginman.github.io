@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="python 闭包">
+
+
+
+
+  <meta name="keywords" content="闭包, DataLimbo">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2016/10/15/python-closure/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> python 闭包 - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          python 闭包
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-10-15
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/python/">python</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一-闭包概念"><span class="toc-text">一.闭包概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-闭包与偏函数的作用"><span class="toc-text">二. 闭包与偏函数的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三-闭包与装饰器"><span class="toc-text">三.闭包与装饰器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四-闭包作用"><span class="toc-text">四.闭包作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五-闭包常见的问题"><span class="toc-text">五.闭包常见的问题</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h1 id="一-闭包概念"><a href="#一-闭包概念" class="headerlink" title="一.闭包概念"></a>一.闭包概念</h1><p>概念：<strong>内部函数可以使用外部函数变量的行为，就叫闭包</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner_func</span><span class="params">(age)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> (<span class="string">"name:%s, age:%d"</span> % (name, age))</span><br><span class="line">    <span class="keyword">return</span> inner_func</span><br><span class="line"></span><br><span class="line">me = func(<span class="string">"Jack"</span>)</span><br><span class="line">me(<span class="number">26</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上面调用func则产生一个闭包(inner_func), 且持有(捕获)一个自由变量`name`, 当func的生命周期结束后</span></span><br><span class="line"><span class="comment"># name 变量依然存在, 以为它被闭包引用了,不会被回收。</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><strong>在 python 的函数内，可以直接引用外部变量，但不能改写外部变量，因此如果在闭包中直接改写父函数的变量，就会发生错误：</strong></p>
+<p><img src="http://beginman.qiniudn.com/2016-10-17-14764575298235.jpg" alt=""></p>
+<p>解决办法：<strong>在函数内使用 <code>global</code> 语句，但全局变量在任何语言中都不被提倡，因为它很难控制。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">global</span> count</span><br><span class="line">        count+=<span class="number">100</span></span><br><span class="line">        <span class="keyword">print</span> (count)</span><br><span class="line">    <span class="keyword">return</span> inner</span><br><span class="line"></span><br><span class="line">foo()()         <span class="comment"># 100</span></span><br><span class="line"><span class="keyword">print</span> count     <span class="comment"># 100</span></span><br></pre></td></tr></table></figure>
+<p>python 3 中引入了 <code>nonlocal</code> 语句解决了这个问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> count</span><br><span class="line">        count+=<span class="number">100</span></span><br><span class="line">        <span class="keyword">print</span> (count)</span><br><span class="line">    <span class="keyword">return</span> inner</span><br><span class="line"></span><br><span class="line">foo()()         <span class="comment"># 100</span></span><br></pre></td></tr></table></figure>
+<h1 id="二-闭包与偏函数的作用"><a href="#二-闭包与偏函数的作用" class="headerlink" title="二. 闭包与偏函数的作用"></a>二. 闭包与偏函数的作用</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_stuff</span><span class="params">(user, pwd, stuff_id)</span>:</span></span><br><span class="line">    print(<span class="string">"get_stuff called with user:%s, pw:%s, stuff_id:%s"</span></span><br><span class="line">          % (user, pwd, stuff_id))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">partial</span><span class="params">(fn, *args, **kwargs)</span>:</span></span><br><span class="line">    <span class="comment"># 偏函数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fn_part</span><span class="params">(*fn_args, **fn_kwargs)</span>:</span></span><br><span class="line">        kwargs.update(fn_kwargs)</span><br><span class="line">        <span class="keyword">return</span> fn(*args + fn_args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> fn_part</span><br><span class="line"></span><br><span class="line">my_stuff = partial(get_stuff, <span class="string">"Jack"</span>, <span class="string">"123456"</span>)</span><br><span class="line">my_stuff(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">my_stuff = partial(get_stuff, <span class="string">"Tom"</span>)</span><br><span class="line">my_stuff(<span class="string">"111111"</span>, <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+<p>在<code>functools</code>模块中已经写好了<code>partial</code>，直接调用即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line">my_stuff = partial(get_stuff, <span class="string">"Jack"</span>)</span><br><span class="line">my_stuff(<span class="string">"111"</span>, <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="三-闭包与装饰器"><a href="#三-闭包与装饰器" class="headerlink" title="三.闭包与装饰器"></a>三.闭包与装饰器</h1><p>这个最常见，不BB了。</p>
+<h1 id="四-闭包作用"><a href="#四-闭包作用" class="headerlink" title="四.闭包作用"></a>四.闭包作用</h1><blockquote>
+<p><strong>闭包的最大特点是可以将父函数的变量与内部函数绑定，并返回绑定变量后的函数（也即闭包），此时即便生成闭包的环境（父函数）已经释放，闭包仍然存在，这个过程很像类（父函数）生成实例（闭包），不同的是父函数只在调用时执行，执行完毕后其环境就会释放，而类则在文件执行时创建，一般程序执行完毕后作用域才释放，因此对一些需要重用的功能且不足以定义为类的行为，使用闭包会比使用类占用更少的资源，且更轻巧灵活。</strong> – 来源：<a href="https://segmentfault.com/a/1190000004461404" target="_blank" rel="noopener">Python 的闭包和装饰器</a></p>
+</blockquote>
+<h1 id="五-闭包常见的问题"><a href="#五-闭包常见的问题" class="headerlink" title="五.闭包常见的问题"></a>五.闭包常见的问题</h1><p><a href="https://segmentfault.com/a/1190000000618513#articleHeader3" target="_blank" rel="noopener">以下的代码的输出将是什么? 说出你的答案并解释？</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multipliers</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">lambda</span> x : i * x <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> [m(<span class="number">2</span>) <span class="keyword">for</span> m <span class="keyword">in</span> multipliers()]</span><br></pre></td></tr></table></figure>
+<p>这里输出[6,6,6,6] 而不是期望的[0, 2, 4, 6]。原因就是内部lambda函数捕获了外部变量<code>i</code>, 形成了<strong>闭包</strong>。在执行 <code>for m in multipliers()</code>虽然执行了<code>multipliers()</code>函数但是变量<code>i</code>并未在函数执行后释放，因为此时的内部Lambda函数并未执行，外部函数的<code>for</code>循环已经完成了，<code>i</code>最后的值是3, 因此，每个返回的函数 multiplies 的值都是 3。</p>
+<p>这段代码在知乎上<a href="https://www.zhihu.com/question/31792789" target="_blank" rel="noopener">Python 闭包代码理解？</a>问题有所反馈，将lambda匿名函数改成具名函数会更加清晰写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def multipliers():</span><br><span class="line">    fns = []</span><br><span class="line">    for i in range(4):</span><br><span class="line">        def fn(x):</span><br><span class="line">            return x*i</span><br><span class="line">        fns.append(fn)</span><br><span class="line">    return fns</span><br><span class="line"></span><br><span class="line">print [m(2) for m in multipliers()]         # [6, 6, 6, 6]</span><br><span class="line">print m.__closure__[0].cell_contents        # 打印闭包值 即i的值 =3</span><br></pre></td></tr></table></figure>
+<p>这里我分享了<a href="https://www.zhihu.com/people/hu-zi-91-29" target="_blank" rel="noopener">@胡子</a>的答案，我觉得他讲的非常好。</p>
+<blockquote>
+<p>1.当函数存在嵌套，并且子函数引用了父函数中的变量，可以访问这些变量的作用域就形成闭包。<br>2.如果子函数没有访问父函数中的变量，就不存在闭包。<br>打个比方:一个大盒子，内部有一个小盒子，小盒子里用到一些东西是来自这个大盒子，那么这些来自大盒子的东西，就是闭包。</p>
+</blockquote>
+<p>在上面的例子中，变量<code>i</code>并没有在内部<code>fn</code>函数中定义，所以<code>fn</code> 和外部变量<code>i</code> 构成闭包，<code>i</code>在<code>range</code>最后取值为3，因此在<code>return fns</code> 这一行的时候，这个闭包里<code>i</code> 的值确定了，都是3, 所以在调用内部函数时，结果都是[6,6,6,6].</p>
+<p>解决方案：</p>
+<ol>
+<li><strong>通过使用默认参数绑定外部变量作为接力棒来消除闭包的影响。</strong></li>
+<li><strong>使用 偏函数<code>functools.partial</code></strong></li>
+</ol>
+<p>先说下第一种方案：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multipliers</span><span class="params">()</span>:</span></span><br><span class="line">    fns = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">fn</span><span class="params">(x, j=i)</span>:</span>     <span class="comment"># 使用中间参数j作为接力棒来暂存外部变量i</span></span><br><span class="line">            <span class="keyword">return</span> x*j      <span class="comment"># 内部函数则使用中间参数j而非i</span></span><br><span class="line">        fns.append(fn)</span><br><span class="line">    <span class="keyword">return</span> fns</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> [m(<span class="number">2</span>) <span class="keyword">for</span> m <span class="keyword">in</span> multipliers()]         <span class="comment"># [0, 2, 4, 6]</span></span><br><span class="line"><span class="keyword">print</span> m.__closure__        <span class="comment"># 打印闭包值 None, 没有闭包，因为外部变量i已经传值给默认参数j了</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>i</code>每个阶段的值，通过默认参数传入<code>j</code>，这时候相当于<code>j</code>拿下了这个接力棒，把中间值都保存下来了，这时候每一个内部函数<code>fn</code>的构成，没有任何闭包，return之后i就销毁了。</p>
+</blockquote>
+<p>改成lambda的形式则如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multipliers</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">lambda</span> x, j=i: x*j <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>)]</span><br></pre></td></tr></table></figure>
+<p>第二种使用<code>functools.partial</code> 函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mul</span><span class="params">(x, i)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x * i</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multipliers</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [partial(mul, i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> [m(<span class="number">2</span>) <span class="keyword">for</span> m <span class="keyword">in</span> multipliers()]         <span class="comment"># [0, 2, 4, 6]</span></span><br></pre></td></tr></table></figure>
+<p>这里偏函数存储变量i作为默认参数。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2016/10/15/python-closure/">http://beginman.cn/2016/10/15/python-closure/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/闭包/">闭包</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/10/21/duck-type/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">鸭子类型</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/10/14/wtfpython-1/">
+        <span class="next-text nav-default">WTF Python(1)</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

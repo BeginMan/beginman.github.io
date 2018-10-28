@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="鸭子类型">
+
+
+
+
+  <meta name="keywords" content="go, 数据结构, 设计模式, DataLimbo">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2016/10/21/duck-type/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 鸭子类型 - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          鸭子类型
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-10-21
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/pyton/">pyton</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+
+
+    <div class="post-content">
+      
+        <p><a href="https://zh.wikipedia.org/wiki/%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B" target="_blank" rel="noopener">WIKI讲鸭子类型</a> 已经很清晰了，我接触这个概念是在看雨痕大神的<a href="https://book.douban.com/subject/26832468/" target="_blank" rel="noopener">《Go语言学习笔记》</a>一书得来的，作者再讲<strong>Golang的接口类型</strong>说就是Duck type。</p>
+<a id="more"></a>
+<p><img src="http://beginman.qiniudn.com/2016-10-21-14770623476371.jpg" alt=""></p>
+<p>图片来源：<a href="http://www.vaikan.com/quacking-the-dog-duck-typing-for-happiness/" target="_blank" rel="noopener">嘎嘎叫的小狗——快乐的鸭子类型</a></p>
+<p>如下代码实现go的接口</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="keyword">string</span></span><br><span class="line">	age  <span class="keyword">byte</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Manager <span class="keyword">struct</span> &#123;</span><br><span class="line">	User</span><br><span class="line">	title <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(u User)</span> <span class="title">ToString</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"%+v"</span>, u)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m Manager)</span> <span class="title">PrintIt</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">"good"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接口类型</span></span><br><span class="line"><span class="keyword">type</span> Print <span class="keyword">interface</span> &#123;</span><br><span class="line">	PrintIt() <span class="keyword">string</span></span><br><span class="line">	ToString() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> admin Manager</span><br><span class="line">	admin.name = <span class="string">"方朋"</span></span><br><span class="line">	admin.age = <span class="number">26</span></span><br><span class="line">	admin.title = <span class="string">"厂长"</span></span><br><span class="line">	fmt.Println(admin.ToString())</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 只要包含接口所需的全部方法，即实现了该接口</span></span><br><span class="line">	<span class="keyword">var</span> p Print = admin</span><br><span class="line">	fmt.Println(p.PrintIt())</span><br><span class="line">	fmt.Println(p.ToString())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>鸭子类型本质体现的是面向接口的编程</strong>，对于Go来说，接口是一种契约，是多个方法的集合。就像鸭子一样，有叫、跑、游泳的方法我们说这是鸭子，<strong>对于Go，接口实现比较简洁，只要目标类型方法集内包含接口声明的全部方法，就称实现了该接口，不用做显示声明。</strong></p>
+<p>对于OOP来说，<strong>体现的是面向继承的编程，但”鸭子类型”像多态一样工作，只是没有继承。</strong></p>
+<blockquote>
+<p>“鸭子类型”的语言是这么推断的：走起来像鸭子、游起泳来像鸭子、叫起来也像鸭子，那它就可以被当做鸭子。<strong>也就是说，它不关注对象的类型，而是关注对象具有的行为(方法)。</strong></p>
+</blockquote>
+<p>上述就是鸭子类型的表现，也就是<strong>任何拥有这样的正确的”走”和”叫”方法的对象都可被函数接受的这种行为。</strong></p>
+<p>如下Python代码演示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Duck</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">quack</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"鸭子呱呱叫"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">swim</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"鸭子游泳"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">quack</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"这人模仿鸭子呱呱叫"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">swim</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"这人模仿鸭子游泳"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">interfaces</span><span class="params">(duck)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    定义一个接口, 约定呱呱叫和游泳的契约</span></span><br><span class="line"><span class="string">    接收一个对象, 看这个对象所拥有的方法存不存在,不存在触发异常</span></span><br><span class="line"><span class="string">    如果都存在, 不管是人还是真鸭子, 都被认为是鸭子</span></span><br><span class="line"><span class="string">    :param duck:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    duck.quack()    <span class="comment"># 呱呱叫</span></span><br><span class="line">    duck.swim()     <span class="comment"># 游泳</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">game</span><span class="params">()</span>:</span></span><br><span class="line">    donald = Duck()     <span class="comment"># 唐老鸭</span></span><br><span class="line">    jack = Person()     <span class="comment"># Jack</span></span><br><span class="line">    interfaces(donald)</span><br><span class="line">    interfaces(jack)</span><br><span class="line"></span><br><span class="line">game()</span><br><span class="line"><span class="comment"># out print:</span></span><br><span class="line"><span class="comment"># 鸭子呱呱叫</span></span><br><span class="line"><span class="comment"># 鸭子游泳</span></span><br><span class="line"><span class="comment"># 这人模仿鸭子呱呱叫</span></span><br><span class="line"><span class="comment"># 这人模仿鸭子游泳</span></span><br></pre></td></tr></table></figure>
+<p>在Python中，<strong>鸭子类型的最典型例子就是类似<code>file</code>(file-like)的类</strong>。这些类可以实现file的一些或全部方法，并可以用于file通常使用的地方。例如，<code>GzipFile</code>,<code>cStringIO</code>,套接字（<code>socket</code>）也和文件共同拥有许多相同的方法。然而套接字缺少<code>tell()</code>方法，不能用于<code>GzipFile</code>可以使用的所有地方。这体现了鸭子类型的可伸缩性：一个类似file的对象可以实现它有能力实现的方法，且只能被用于它有意义的情形下。</p>
+<p><strong>“鸭子类型”没有任何静态检查，如类型检查、属性检查、方法签名检查等。</strong>，一切都靠契约和自觉性，所以在可能会在运行时因为不具备某种特定的方法而抛出异常。</p>
+<blockquote>
+<p>Duck-typing avoids tests using <code>type()</code> or <code>isinstance()</code>. Instead, it typically employs the <strong>EAFP</strong> (Easier to Ask Forgiveness than Permission) style of programming.</p>
+</blockquote>
+<p>在Python里EAFP原则描述了异常处理的使用。例如相对于检查一个自称为类似Duck的对象是否拥有一个<code>quack()</code>方法（使用<code>if hasattr(mallard, &quot;quack&quot;): ...</code>），人们通常更倾向于用异常处理把对quack的调用尝试包裹起来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    mallard.quack()</span><br><span class="line"><span class="keyword">except</span> (AttributeError, TypeError):</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"mallard并沒有quack()函式"</span></span><br></pre></td></tr></table></figure>
+<p>在Js里和Python一样，都属于动态语言，比较灵活。如下是JS的实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">guagua</span>(<span class="params">duck</span>) </span>&#123;</span><br><span class="line">    duck.quack(<span class="string">"呱呱叫.."</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> donald = &#123;<span class="attr">quack</span>: <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>) </span>&#123; <span class="built_in">console</span>.log(msg) &#125;&#125;;</span><br><span class="line"><span class="keyword">var</span> jack = &#123;<span class="attr">name</span>:<span class="string">"Jack"</span>, </span><br><span class="line">            swim: <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;&#125;, </span><br><span class="line">            quack: <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>) </span>&#123; <span class="built_in">console</span>.log(msg) &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&gt; guagua(donald)</span><br><span class="line">呱呱叫..</span><br><span class="line"></span><br><span class="line">&gt; guagua(jack)</span><br><span class="line">呱呱叫..</span><br></pre></td></tr></table></figure>
+<p>完~</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2016/10/21/duck-type/">http://beginman.cn/2016/10/21/duck-type/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/go/">go</a>
+            
+              <a href="/tags/数据结构/">数据结构</a>
+            
+              <a href="/tags/设计模式/">设计模式</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/10/27/The-Art-of-Readable-Code/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">编写可读代码的艺术</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/10/15/python-closure/">
+        <span class="next-text nav-default">python 闭包</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

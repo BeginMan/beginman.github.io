@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="编写可读代码的艺术">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2016/10/27/The-Art-of-Readable-Code/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 编写可读代码的艺术 - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          编写可读代码的艺术
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-10-27
+        </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一-第一部分：修于表"><span class="toc-text">一. 第一部分：修于表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-代码应当易于理解"><span class="toc-text">1. 代码应当易于理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-把信息装到名字里"><span class="toc-text">2.把信息装到名字里</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-不会误解的名字"><span class="toc-text">3.不会误解的名字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-审美"><span class="toc-text">4.审美</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-该写什么样的注释？"><span class="toc-text">5.该写什么样的注释？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-第二部分：简化循环和逻辑"><span class="toc-text">二.第二部分：简化循环和逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-把控制流变得易读"><span class="toc-text">7.把控制流变得易读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-变量与可读性"><span class="toc-text">8.变量与可读性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-减少变量"><span class="toc-text">(1). 减少变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-缩小变量的作用域"><span class="toc-text">(2).缩小变量的作用域</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-抽取不相关的子问题"><span class="toc-text">9.抽取不相关的子问题</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p><a href="https://book.douban.com/subject/10797189/" target="_blank" rel="noopener">《编写可读代码的艺术》</a>真是一本好书，读完之后收获很多，再回头看自己写的代码，真特么恶心。如何写优秀的代码？优雅的代码？牛逼的代码呢？ <strong>我总结了下面几点：</strong></p>
+<p><strong>1. 掌握该门语言良好的编程风格和规范。</strong><br><strong>2. 熟练该门语言的语法和标准库，这是关键。</strong><br><strong>3. 多阅读和参与一些牛逼的开源代码，从别人的代码中汲取养分。</strong><br><strong>4. 学习设计模式、软件架构等理论基础。</strong></p>
+<p>这本书呢，很全面，<strong>关键思想是代码应该写得容易理解。确切地说，使别人用最短的时间理解你的代码。</strong></p>
+<a id="more"></a>
+<p><img src="https://img3.doubanio.com/lpic/s10328621.jpg" alt=""></p>
+<p>本书分成四部分：</p>
+<ol>
+<li>表面层次上的改进 （命名、注释以及审美）</li>
+<li>简化循环和逻辑 （在程序中定义循环、逻辑和变量，从而使得代码更容易理解）</li>
+<li>重新组织你的代码（第2条是行的简化艺术，那么第3条则是块（库、函数）拆分的艺术）</li>
+<li>精选话题（测试,略去）</li>
+</ol>
+<h1 id="一-第一部分：修于表"><a href="#一-第一部分：修于表" class="headerlink" title="一. 第一部分：修于表"></a>一. 第一部分：修于表</h1><h2 id="1-代码应当易于理解"><a href="#1-代码应当易于理解" class="headerlink" title="1. 代码应当易于理解"></a>1. 代码应当易于理解</h2><p><strong>关键思想:代码应当易于理解, 具有良好的可读性，代码的写法应当使别人理解它所需的时间最小化。因此尽管减少代码行数是一个好目标，但把理解代码所需的时间最小化是一个更好的目标。</strong></p>
+<blockquote>
+<p>我们的可读性之旅从我们认为“表面层次”的改进开始：选择好的名字、写好的注释以及把代码整洁地写成更好的格式。这些改变很容易应用。</p>
+</blockquote>
+<h2 id="2-把信息装到名字里"><a href="#2-把信息装到名字里" class="headerlink" title="2.把信息装到名字里"></a>2.把信息装到名字里</h2><p><strong>关键思想 把信息装入名字中</strong></p>
+<p>本章分成6个专题：</p>
+<ol>
+<li>选择专业的词， 如不用get,而是用download等，这往往由上下文决定。</li>
+<li>避免泛泛的名字，如tmp等，除非你自己十分清楚。</li>
+<li>用具体的名字替代抽象名字</li>
+<li>使用前缀或后缀来给名字附带更多信息</li>
+<li>决定名字的长度</li>
+<li>利用名字的格式来表达含义</li>
+</ol>
+<p>对于命名来说，是程序员头疼的问题，下面是一些例子，这些单词更有表现力，可能适合你的语境：</p>
+<p><img src="http://beginman.qiniudn.com/2016-10-27-14775563195249.png" alt=""></p>
+<blockquote>
+<p>好的名字应当描述变量的目的或者它所承载的值。</p>
+</blockquote>
+<p><strong>建议：tmp这个名字只应用于短期存在且临时性为其主要存在因素的变量。</strong></p>
+<p>对于循环迭代器，像<code>i</code>,<code>j</code>,<code>k</code>等常作为索引或key，尽管这些名字很空泛，但是大家都知道。但是如果涉及更具体的情况，如forloop找到一个user属于哪个club:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;clubs.size();i++)</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;clubs[i].members.size();j++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;users.size();k++)</span><br><span class="line">            <span class="comment">// ... do stuff ...</span></span><br></pre></td></tr></table></figure>
+<p>在这种情况下，使用更精确的名字可能会有帮助。如果不把循环索引命名为（i、j、k），另一个选择可以是（<code>club_i</code>、<code>members_i</code>、<code>user_i</code>）或者，更简化一点（<code>ci</code>、<code>mi</code>、<code>ui</code>）。这种方式会帮助把代码中的缺陷变得更明显。</p>
+<blockquote>
+<p>在给变量、函数或者其他元素命名时，要把它描述得更具体而不是更抽象。</p>
+</blockquote>
+<p>因此，如果关于一个变量有什么重要事情的读者必须知道，那么是值得把额外的“词”添加到名字中的。</p>
+<p>如：一个变量包含十六进制字符串：</p>
+<pre><code>string id; // example: &quot;ab3fe21&quot;
+</code></pre><p>如果要读者记住这个id很重要的话，最好改名为<code>hex_id</code>。<strong>前缀后缀来描述额外信息。</strong></p>
+<p>下表列出一些没有单位的函数参数以及带单位的版本：</p>
+<p><img src="http://beginman.qiniudn.com/2016-10-27-14775565119670.png" alt=""></p>
+<p>关于变量名的长度，那么如何来处理这种平衡呢？如何来决定是把一变量命名为d、days还是days_since_last_update呢？ 这是要你自己要拿主意的，最好的答案和这个变量如何使用有关系，但下面还是提出了一些指导原则。</p>
+<ul>
+<li>在小的作用域里可以使用较短的名字， 小作用域一般一眼就看出个究竟。如变量类型、初值、如何析构很容易看清。</li>
+<li>因此如果一个标识符有较大的作用域，那么它的名字就要包含足够的信息以便含义更清楚。</li>
+</ul>
+<h2 id="3-不会误解的名字"><a href="#3-不会误解的名字" class="headerlink" title="3.不会误解的名字"></a>3.不会误解的名字</h2><p>本章会关注另一个话题：小心可能会有歧义的名字。<strong>关键思想 要多问自己几遍：这个名字会被别人解读成其他的含义吗？</strong></p>
+<p><strong>建议：</strong></p>
+<ul>
+<li>命名极限最清楚的方式是在要限制的东西前加上<code>max_</code>或者<code>min_</code></li>
+<li>推荐用first和last来表示包含的范围</li>
+<li>推荐用begin和end来表示包含/排除范围</li>
+</ul>
+<p>在给布尔值命名的时候要确保布尔变量或布尔函数返回true或false的意义明确。比如下面的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> read_pwd = <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+<p>这会有两种不同的解释：</p>
+<ul>
+<li>需要读密码</li>
+<li>是否已经读取密码</li>
+</ul>
+<p>这里read这个词迷惑性较大，改成need_pwd或is_authenticated更加合适。<strong>通常来讲，加上像is、has、can或should这样的词，可以把布尔值变得更明确。</strong></p>
+<p>避免使用反义词，如 <code>bool disable_ssl=false;</code>, 最好改成<code>bool use_ssl=true;</code></p>
+<p><strong>总结：</strong></p>
+<ol>
+<li>避免使用多意性的词，如：filter,length,size, limit等，要具体化变量名称。</li>
+<li>使用前后缀定义上下限，范围等。</li>
+<li>给布尔变量或函数命名要使用is,has等意义明确的词，避免使用反义。</li>
+</ol>
+<h2 id="4-审美"><a href="#4-审美" class="headerlink" title="4.审美"></a>4.审美</h2><p>好的源代码应当“看上去养眼”。有三条原则：</p>
+<ol>
+<li>使用一致的布局，统一风格</li>
+<li>让相似的代码看上去相似</li>
+<li>把相关的代码分组，形成代码块</li>
+</ol>
+<p>关于第一条在Python中是不符合规范的，在JS/C/C++/Java等很常见，比如下面的js代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> crypto 		= <span class="built_in">require</span>(<span class="string">'crypto'</span>);</span><br><span class="line"><span class="keyword">var</span> MongoDB 	= <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Db;</span><br><span class="line"><span class="keyword">var</span> Server 		= <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Server;</span><br><span class="line"><span class="keyword">var</span> moment 		= <span class="built_in">require</span>(<span class="string">'moment'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	ESTABLISH DATABASE CONNECTION</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> dbName = process.env.DB_NAME || <span class="string">'node-login'</span>;</span><br><span class="line"><span class="keyword">var</span> dbHost = process.env.DB_HOST || <span class="string">'localhost'</span>;</span><br><span class="line"><span class="keyword">var</span> dbPort = process.env.DB_PORT || <span class="number">27017</span>;</span><br></pre></td></tr></table></figure>
+<p>这样的好处就是：<strong>对称美，容易发现bug，容易定位变量。坏处就是你需要维护这些对称，不管是tab还是space。</strong></p>
+<h2 id="5-该写什么样的注释？"><a href="#5-该写什么样的注释？" class="headerlink" title="5.该写什么样的注释？"></a>5.该写什么样的注释？</h2><blockquote>
+<p>注释的目的是尽量帮助读者了解的和作者一样多。</p>
+</blockquote>
+<p>本节分以下部分：</p>
+<ol>
+<li>了解不需要注释</li>
+<li>用代码记录思想</li>
+<li>站在读者角度</li>
+</ol>
+<p><strong>小建议：</strong></p>
+<ul>
+<li>不要为那些从代码本身就能快速推断的事实写注释。</li>
+<li>不要为了注释而注释。</li>
+<li>注释不应用于粉饰不好的名字。</li>
+<li>你不需要“拐杖式注释”——试图粉饰可读性差的代码的注释。写代码的人常常把这条规则表述成：好代码＞坏代码+好注释。</li>
+<li>要为代码中的瑕疵写注释， 如这段代码哪里可能有问题，哪里需要改进等。加todo等小标记。</li>
+</ul>
+<p><img src="http://beginman.qiniudn.com/2016-10-27-14775582275056.jpg" alt=""></p>
+<h1 id="二-第二部分：简化循环和逻辑"><a href="#二-第二部分：简化循环和逻辑" class="headerlink" title="二.第二部分：简化循环和逻辑"></a>二.第二部分：简化循环和逻辑</h1><p>通过试着最小化代码中的“思维包袱”来达到目的</p>
+<h2 id="7-把控制流变得易读"><a href="#7-把控制流变得易读" class="headerlink" title="7.把控制流变得易读"></a>7.把控制流变得易读</h2><p>要注意条件语句中的参数的顺序，如：<code>if (len&gt;10)</code> VS <code>if (10 &lt; len)</code>, 前者比后者可读性好。下面是指导原则：</p>
+<p><img src="http://beginman.qiniudn.com/2016-10-27-14775585334242.jpg" alt=""></p>
+<p><strong>其他原则</strong>：</p>
+<ul>
+<li>对于if..else, 首先处理的是正，而非负， 如 <code>if(a) else ..</code> 比 <code>if(!a) else ..</code>好。</li>
+<li>先处理简单的。</li>
+<li>先处理重要的或可疑的。</li>
+<li>关于三目运算：相对于追求最小化代码行数，一个更好的度量方法是最小化人们理解它所需的时间。</li>
+</ul>
+<h2 id="8-变量与可读性"><a href="#8-变量与可读性" class="headerlink" title="8.变量与可读性"></a>8.变量与可读性</h2><p><strong>有如下规则需要注意下：</strong></p>
+<ol>
+<li>变量越多，越难跟踪。</li>
+<li>变量作用域越大，越容易出问题，跟踪它的动向就越久。</li>
+<li>变量改动越频繁，越难跟踪它的当前值。</li>
+</ol>
+<p><strong>解决方法：</strong></p>
+<ol>
+<li>减少变量<ul>
+<li>减少没有价值的变量</li>
+<li>减少中间结果</li>
+<li>减少控制流变量 如 <code>Boolen isOk=false</code></li>
+</ul>
+</li>
+<li>缩小变量的作用域</li>
+<li>只写一次的变量更好（const/final/常量等）使代码更容易理解。</li>
+</ol>
+<h3 id="1-减少变量"><a href="#1-减少变量" class="headerlink" title="(1). 减少变量"></a>(1). 减少变量</h3><p>不要写没有价值的变量，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">now = datetime.datetime.now()</span><br><span class="line">msg.last_view_time = now</span><br></pre></td></tr></table></figure>
+<p><strong>要考虑如下情况：</strong></p>
+<ol>
+<li>now变量用了几次？</li>
+<li>now变量是否值得保留？</li>
+<li>有没有拆分复杂的表达式？</li>
+<li>还有没有做更多澄清？因为表达式datetime.datetime.now()已经很明晰了</li>
+<li>如果没有now变量，会对代码有什么影响？</li>
+</ol>
+<p>上述这段代码显而易见，now变量没啥用，直接改成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msg.last_view_time = datetime.datetime.now()</span><br></pre></td></tr></table></figure>
+<h3 id="2-缩小变量的作用域"><a href="#2-缩小变量的作用域" class="headerlink" title="(2).缩小变量的作用域"></a>(2).缩小变量的作用域</h3><blockquote>
+<p>避免全局变量。很多编程语言提供了多重作用域/访问级别，包括模块、类、函数以及语句块作用域。通常越严格的访问控制越好，因为这意味着该变量对更少的代码行“可见”。</p>
+</blockquote>
+<p>在OOP编程里，要减少类成员变量，因为它们就像类世界里的小型全局变量一样。可以使用方法参数的方式或静态方法来避免。静态方法是让读者知道“这几行代码与那些变量无关”的好办法。</p>
+<p>在JS里的常用闭包来处理”私有”变量。</p>
+<h2 id="9-抽取不相关的子问题"><a href="#9-抽取不相关的子问题" class="headerlink" title="9.抽取不相关的子问题"></a>9.抽取不相关的子问题</h2><p>本章的建议是“积极地发现并抽取出不相关的子逻辑”。</p>
+<p><strong>指导思想：</strong></p>
+<ol>
+<li>DRY原则</li>
+<li>一个函数只做一件事</li>
+<li>创建大量通用代码</li>
+<li>保持小代码库<ul>
+<li>减少无用代码或功能</li>
+<li>项目拆分</li>
+<li>模块化</li>
+<li>服务化</li>
+</ul>
+</li>
+</ol>
+<p><img src="http://beginman.qiniudn.com/2016-10-27-14775596100215.jpg" alt=""></p>
+<p>（完~）</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2016/10/27/The-Art-of-Readable-Code/">http://beginman.cn/2016/10/27/The-Art-of-Readable-Code/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/08/23/the-guide-for-pandas/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Pandas 入门指南</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/10/21/duck-type/">
+        <span class="next-text nav-default">鸭子类型</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>
