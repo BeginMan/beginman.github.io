@@ -17,8 +17,12 @@
 
 
 
+  <meta name="description" content="golang statik静态资源二进制打包">
 
 
+
+
+  <meta name="keywords" content="序列化, avro, DataLimbo">
 
 
 
@@ -38,7 +42,7 @@
 
 
 
-<link rel="canonical" href="http://beginman.cn/archives/2017/08/">
+<link rel="canonical" href="http://beginman.cn/2018/10/15/blog/Golang/statik/">
 
 
 
@@ -86,11 +90,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
 </script>
 
-    <title>
-  
-    归档 - DataLimbo
-  
-</title>
+    <title> golang statik静态资源二进制打包 - DataLimbo </title>
   </head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -220,59 +220,115 @@
           <div id="content" class="content">
             
   
-  
-  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          golang statik静态资源二进制打包
+        
+      </h1>
 
-  <section id="archive" class="archive">
-    
-      
-        <div class="archive-title">
-          <span class="archive-post-counter">
-            目前共计 16 篇日志
+      <div class="post-meta">
+        <span class="post-time">
+          2018-10-15
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/avro/">avro</a>
+            
           </span>
-        </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+
+
+    <div class="post-content">
+      
+        <p><a href="https://github.com/rakyll/statik" target="_blank" rel="noopener">statik</a> 是golang 将静态资源编译进二进制文件的一个库，有很多databoard等web component通过这个工具来处理，如 <a href="https://github.com/BeginMan/ElasticHD" target="_blank" rel="noopener">https://github.com/BeginMan/ElasticHD</a> 还是很cool的。</p>
+<p>官方给的例子也不错：<a href="https://github.com/rakyll/statik/tree/aa8a7b1baecd0f31a436bf7956fcdcc609a83035/example" target="_blank" rel="noopener">https://github.com/rakyll/statik/tree/aa8a7b1baecd0f31a436bf7956fcdcc609a83035/example</a></p>
+<p><strong>基于此能做什么呢？</strong></p>
+<ol>
+<li>将静态资源打包进去</li>
+<li>打包前后端成一个可执行程序</li>
+</ol>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2018/10/15/blog/Golang/statik/">http://beginman.cn/2018/10/15/blog/Golang/statik/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
       
     
 
     
-      
+      <footer class="post-footer">
         
-        
-
-        
-          
-          <div class="collection-title">
-            <h2 class="archive-year">2017</h2>
+          <div class="post-tags">
+            
+              <a href="/tags/序列化/">序列化</a>
+            
+              <a href="/tags/avro/">avro</a>
+            
           </div>
         
-      
-
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            08-23
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2017/08/23/the-guide-for-pandas/" class="archive-post-link">
-            Pandas 入门指南
-          </a>
-        </span>
-      </div>
+        
+        
+  <nav class="post-nav">
     
-  </section>
-
-  
-  <nav class="pagination">
+      <a class="prev" href="/2018/10/15/blog/Java/文件读取/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">java resource读取</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
     
+    
+      <a class="next" href="/2018/10/15/blog/Bigdata/integrating hive with hbase/">
+        <span class="next-text nav-default">HBase integrated with Hive</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
     
   </nav>
 
 
+      </footer>
+    
+
+  </article>
 
 
           </div>
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
       </main>
@@ -357,6 +413,11 @@
     </div>
 
     
+  
+  
+
+  
+
 
 
     

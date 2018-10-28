@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="apache avro">
+
+
+
+
+  <meta name="keywords" content="序列化, avro, DataLimbo">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2018/10/15/blog/Bigdata/Apache Avro/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> apache avro - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          apache avro
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-10-15
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/avro/">avro</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Overview"><span class="toc-text">1.Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-maven-配置"><span class="toc-text">2.1 maven 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-定义Avro-schema"><span class="toc-text">2.2 定义Avro schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-代码生成方式的序列化和反序列化"><span class="toc-text">2.3 代码生成方式的序列化和反序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-非代码生成方式的序列化和反序列化"><span class="toc-text">2.4 非代码生成方式的序列化和反序列化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Avro工具"><span class="toc-text">3 Avro工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-使用场景"><span class="toc-text">4.使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-参考"><span class="toc-text">5.参考</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h2 id="1-Overview"><a href="#1-Overview" class="headerlink" title="1.Overview"></a>1.Overview</h2><p>avro是RPC和数据序列化系统(data serialization system)，使用JSON定义数据类型及通信协议，使用<strong>压缩二进制</strong>来序列化数据，是Hadoop<strong>持久化</strong>数据的一种序列化格式。</p>
+<a id="more"></a>
+<h3 id="2-1-maven-配置"><a href="#2-1-maven-配置" class="headerlink" title="2.1 maven 配置"></a>2.1 maven 配置</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.datalimbo.qos<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>AvroEgg<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.avro<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>avro<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.8.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--avro代码生成--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.avro<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>avro-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.8.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">phase</span>&gt;</span>generate-sources<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">goal</span>&gt;</span>schema<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">sourceDirectory</span>&gt;</span>$&#123;project.basedir&#125;/src/main/resources/avro/<span class="tag">&lt;/<span class="name">sourceDirectory</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>$&#123;project.basedir&#125;/src/main/java/<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.6<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.6<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>avro可以以代码生成的方式和非代码生成方式进行，关于maven avro build可参考：<a href="[Build Documentation](https://cwiki.apache.org/confluence/display/AVRO/Build+Documentation">https://cwiki.apache.org/confluence/display/AVRO/Build+Documentation</a>)</p>
+<h3 id="2-2-定义Avro-schema"><a href="#2-2-定义Avro-schema" class="headerlink" title="2.2 定义Avro schema"></a>2.2 定义Avro schema</h3><p>基于json, 关于数据结构可参考：<a href="https://avro.apache.org/docs/current/spec.html#schema_primitive" target="_blank" rel="noopener">Apache Avro™ 1.8.2 Specification</a>，如下<code>user.avsc</code>（schema文件是avsc文件注意后缀是<code>avsc</code>)</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"namespace"</span>: <span class="string">"com.datalimbo.qos.avro"</span>,</span><br><span class="line"> <span class="attr">"type"</span>: <span class="string">"record"</span>,</span><br><span class="line"> <span class="attr">"name"</span>: <span class="string">"User"</span>,</span><br><span class="line"> <span class="attr">"fields"</span>: [</span><br><span class="line">     &#123;<span class="attr">"name"</span>: <span class="string">"name"</span>, <span class="attr">"type"</span>: <span class="string">"string"</span>&#125;,</span><br><span class="line">     &#123;<span class="attr">"name"</span>: <span class="string">"favorite_number"</span>,  <span class="attr">"type"</span>: [<span class="string">"int"</span>, <span class="string">"null"</span>]&#125;,</span><br><span class="line">     &#123;<span class="attr">"name"</span>: <span class="string">"favorite_color"</span>, <span class="attr">"type"</span>: [<span class="string">"string"</span>, <span class="string">"null"</span>]&#125;</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在模式定义中，必须包含它的类型(“type”: “record”)、一个名字(“name”: “User”)以及fields</p>
+<h3 id="2-3-代码生成方式的序列化和反序列化"><a href="#2-3-代码生成方式的序列化和反序列化" class="headerlink" title="2.3 代码生成方式的序列化和反序列化"></a>2.3 代码生成方式的序列化和反序列化</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.datalimbo.qos;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.datalimbo.qos.avro.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.avro.file.DataFileReader;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.file.DataFileWriter;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.io.DatumReader;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.io.DatumWriter;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.specific.SpecificDatumReader;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.specific.SpecificDatumWriter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 方式1：指定生成代码形式的序列化和反序列化</span></span><br><span class="line"><span class="comment"> * Usage:</span></span><br><span class="line"><span class="comment"> *  $ mvn compile # includes code generation via Avro Maven plugin</span></span><br><span class="line"><span class="comment"> *  $ mvn -q exec:java -Dexec.mainClass=example.SpecificMain</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * created by fangpeng 2018-10-15 15:00</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpecificMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 创建用户</span></span><br><span class="line">        User user1 = <span class="keyword">new</span> User();</span><br><span class="line">        user1.setName(<span class="string">"Lucy"</span>);</span><br><span class="line">        user1.setFavoriteNumber(<span class="number">256</span>);</span><br><span class="line">        <span class="comment">// Leave favorite color null</span></span><br><span class="line"></span><br><span class="line">        User user2 = <span class="keyword">new</span> User(<span class="string">"Ben"</span>, <span class="number">7</span>, <span class="string">"red"</span>);</span><br><span class="line"></span><br><span class="line">        User user3 = User.newBuilder()</span><br><span class="line">                .setName(<span class="string">"Jack"</span>)</span><br><span class="line">                .setFavoriteNumber(<span class="keyword">null</span>)</span><br><span class="line">                .setFavoriteColor(<span class="string">"green"</span>)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        System.out.println(user1.toString());</span><br><span class="line">        System.out.println(user2.toString());</span><br><span class="line">        System.out.println(user3.toString());</span><br><span class="line"></span><br><span class="line"><span class="comment">//         output:</span></span><br><span class="line"><span class="comment">//        &#123;"name": "Lucy", "favorite_number": 256, "favorite_color": null&#125;</span></span><br><span class="line"><span class="comment">//        &#123;"name": "Ben", "favorite_number": 7, "favorite_color": "red"&#125;</span></span><br><span class="line"><span class="comment">//        &#123;"name": "Jack", "favorite_number": null, "favorite_color": "green"&#125;</span></span><br><span class="line"></span><br><span class="line">        String avrofile = <span class="string">"users.avro"</span>;</span><br><span class="line">        <span class="comment">// 序列化user1,2,3到磁盘</span></span><br><span class="line">        serializing(user1, user2, user3, avrofile);</span><br><span class="line">        <span class="comment">// 反序列化</span></span><br><span class="line">        Deserializing(avrofile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">serializing</span><span class="params">(User user1, User user2, User user3, String avrofile)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Serialize user1, user2 and user3 to disk</span></span><br><span class="line">        <span class="comment">// DatumWriter 将Java对象转换成内存序列化格式(in-memory serialized format)</span></span><br><span class="line">        <span class="comment">// SpecificDatumWriter 用于生成的类并从指定的生成类型中提取模式</span></span><br><span class="line">        DatumWriter&lt;User&gt; userDatumWriter = <span class="keyword">new</span> SpecificDatumWriter&lt;User&gt;(User.class);</span><br><span class="line">        <span class="comment">// DataFileWriter 写入序列化记录以及模式到dataFileWriter.create调用中指定的文件</span></span><br><span class="line">        DataFileWriter&lt;User&gt; dataFileWriter = <span class="keyword">new</span> DataFileWriter&lt;User&gt;(userDatumWriter);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            dataFileWriter.create(user1.getSchema(), <span class="keyword">new</span> File(avrofile));</span><br><span class="line">            <span class="comment">// append方法写入user对象</span></span><br><span class="line">            dataFileWriter.append(user1);</span><br><span class="line">            dataFileWriter.append(user2);</span><br><span class="line">            dataFileWriter.append(user3);</span><br><span class="line">            <span class="comment">// 写入完成后关闭文件</span></span><br><span class="line">            dataFileWriter.close();</span><br><span class="line">            System.out.println(<span class="string">"写入users.avro成功"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Deserializing</span><span class="params">(String avrofile)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 反序列化</span></span><br><span class="line">        <span class="comment">// SpecificDatumReader converts in-memory serialized items into instances of our generated class, in this case User.</span></span><br><span class="line">        DatumReader&lt;User&gt; datumReader = <span class="keyword">new</span> SpecificDatumReader&lt;User&gt;(User.class);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// DataFileReader 从磁盘中读取avro文件</span></span><br><span class="line">            DataFileReader&lt;User&gt; dataFileReader = <span class="keyword">new</span> DataFileReader&lt;User&gt;(<span class="keyword">new</span> File(avrofile), datumReader);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 创建单个User对象用于存储迭代中的反序列化user</span></span><br><span class="line">            User user = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">while</span> (dataFileReader.hasNext()) &#123;</span><br><span class="line">                <span class="comment">// 传递user对象给next方法，这是一种性能优化，允许DataFileReader重用相同的User对象，而不是为每次迭代分配新用户</span></span><br><span class="line">                <span class="comment">// 如果我们反序列化大型数据文件，这在对象分配和垃圾收集方面可能非常昂贵</span></span><br><span class="line">                user = dataFileReader.next(user);</span><br><span class="line">                System.out.println(<span class="string">"读取 &gt; "</span> + user.toString());</span><br><span class="line">            &#125;</span><br><span class="line">            dataFileReader.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译schema, 在非maven build 下的命令行模式可以</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># java -jar /path/to/avro-tools-1.8.2.jar compile schema &lt;schema file&gt; &lt;destination&gt;</span></span><br><span class="line">$ java -jar /path/to/avro-tools-1.8.2.jar compile schema user.avsc .</span><br></pre></td></tr></table></figure>
+<p>如果配置了上面maven build项，可直接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mvn compile <span class="comment"># includes code generation via Avro Maven plugin</span></span><br></pre></td></tr></table></figure>
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ mvn -q <span class="built_in">exec</span>:java -Dexec.mainClass=com.datalimbo.qos.SpecificMain </span><br><span class="line"></span><br><span class="line"><span class="string">"name"</span>: <span class="string">"Lucy"</span>, <span class="string">"favorite_number"</span>: 256, <span class="string">"favorite_color"</span>: null&#125;</span><br><span class="line">&#123;<span class="string">"name"</span>: <span class="string">"Ben"</span>, <span class="string">"favorite_number"</span>: 7, <span class="string">"favorite_color"</span>: <span class="string">"red"</span>&#125;</span><br><span class="line">&#123;<span class="string">"name"</span>: <span class="string">"Jack"</span>, <span class="string">"favorite_number"</span>: null, <span class="string">"favorite_color"</span>: <span class="string">"green"</span>&#125;</span><br><span class="line">写入users.avro成功</span><br><span class="line">读取 &gt; &#123;<span class="string">"name"</span>: <span class="string">"Lucy"</span>, <span class="string">"favorite_number"</span>: 256, <span class="string">"favorite_color"</span>: null&#125;</span><br><span class="line">读取 &gt; &#123;<span class="string">"name"</span>: <span class="string">"Ben"</span>, <span class="string">"favorite_number"</span>: 7, <span class="string">"favorite_color"</span>: <span class="string">"red"</span>&#125;</span><br><span class="line">读取 &gt; &#123;<span class="string">"name"</span>: <span class="string">"Jack"</span>, <span class="string">"favorite_number"</span>: null, <span class="string">"favorite_color"</span>: <span class="string">"green"</span>&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-非代码生成方式的序列化和反序列化"><a href="#2-4-非代码生成方式的序列化和反序列化" class="headerlink" title="2.4 非代码生成方式的序列化和反序列化"></a>2.4 非代码生成方式的序列化和反序列化</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.datalimbo.qos;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.avro.Schema;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.file.DataFileReader;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.file.DataFileWriter;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.generic.GenericData;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.generic.GenericDatumReader;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.generic.GenericDatumWriter;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.generic.GenericRecord;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.io.DatumReader;</span><br><span class="line"><span class="keyword">import</span> org.apache.avro.io.DatumWriter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * created by fangpeng 2018-10-15 16:32</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        withoutCodeGenerationVersion();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方式2：非生成代码方式的序列化和反序列化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">withoutCodeGenerationVersion</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ClassLoader classLoader = SpecificMain.class.getClassLoader();</span><br><span class="line">            File file = <span class="keyword">new</span> File(classLoader.getResource(<span class="string">"avro/user.avsc"</span>).getFile());</span><br><span class="line">            <span class="comment">// Parse读取schema</span></span><br><span class="line">            Schema schema = <span class="keyword">new</span> Schema.Parser().parse(file);</span><br><span class="line">            <span class="comment">// 使用GenericRecord从schema中创建用户</span></span><br><span class="line">            GenericRecord user1 = <span class="keyword">new</span> GenericData.Record(schema);</span><br><span class="line">            user1.put(<span class="string">"name"</span>, <span class="string">"张三"</span>);</span><br><span class="line">            user1.put(<span class="string">"favorite_number"</span>, <span class="number">256</span>);</span><br><span class="line">            System.out.println(user1);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 序列化</span></span><br><span class="line">            DatumWriter&lt;GenericRecord&gt; datumWriter = <span class="keyword">new</span> GenericDatumWriter&lt;GenericRecord&gt;(schema);</span><br><span class="line">            DataFileWriter&lt;GenericRecord&gt; dataFileWriter = <span class="keyword">new</span> DataFileWriter&lt;GenericRecord&gt;(datumWriter);</span><br><span class="line">            dataFileWriter.create(schema, <span class="keyword">new</span> File(<span class="string">"users-v2.avro"</span>));</span><br><span class="line">            dataFileWriter.append(user1);</span><br><span class="line">            dataFileWriter.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 反序列化</span></span><br><span class="line">            DatumReader&lt;GenericRecord&gt; datumReader = <span class="keyword">new</span> GenericDatumReader&lt;GenericRecord&gt;(schema);</span><br><span class="line">            DataFileReader&lt;GenericRecord&gt; dataFileReader = <span class="keyword">new</span> DataFileReader&lt;GenericRecord&gt;(<span class="keyword">new</span> File(<span class="string">"users-v2.avro"</span>), datumReader);</span><br><span class="line">            GenericRecord user = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">while</span> (dataFileReader.hasNext()) &#123;</span><br><span class="line">                user = dataFileReader.next(user);</span><br><span class="line">                System.out.println(<span class="string">"Read: "</span> + user);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mvn compile</span><br><span class="line">$ mvn -q <span class="built_in">exec</span>:java -Dexec.mainClass=com.datalimbo.qos.GenericMain </span><br><span class="line"></span><br><span class="line">&#123;<span class="string">"name"</span>: <span class="string">"张三"</span>, <span class="string">"favorite_number"</span>: 256, <span class="string">"favorite_color"</span>: null&#125;</span><br><span class="line">Read: &#123;<span class="string">"name"</span>: <span class="string">"张三"</span>, <span class="string">"favorite_number"</span>: 256, <span class="string">"favorite_color"</span>: null&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-Avro工具"><a href="#3-Avro工具" class="headerlink" title="3 Avro工具"></a>3 Avro工具</h2><p>使用Avro工具检查Avro数据文件</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fw90ka7gdkj30ha066adx.jpg" alt="image-20181015170048735"></p>
+<p>如果是jar包可以</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar avro-tools-1.8.2.jar tojson AvroEgg/users.avro</span><br></pre></td></tr></table></figure>
+<h2 id="4-使用场景"><a href="#4-使用场景" class="headerlink" title="4.使用场景"></a>4.使用场景</h2><p>avro与Hadoop生态系统结合最好</p>
+<p>Hive表定义可以直接用avro schema来声明，Hive里用它来序列化日志文件，优点是可以直接用avro schema替代Hive本身表结构定义，这样能比较方便的解决schema evolution问题</p>
+<p>在kafka和Flume 中也有很多使用avro的. flume主要的RPC source就是Avro source, 与 Avro sink, FlumeSDK等构成Flume内部通信</p>
+<h2 id="5-参考"><a href="#5-参考" class="headerlink" title="5.参考"></a>5.参考</h2><ul>
+<li><a href="https://zh.wikipedia.org/wiki/Apache_Avro" target="_blank" rel="noopener">Apache Avro</a></li>
+<li><a href="https://avro.apache.org/docs/current/index.html" target="_blank" rel="noopener">Apache Avro™ 1.8.2 Documentation</a></li>
+<li><a href="https://avro.apache.org/docs/current/gettingstartedjava.html" target="_blank" rel="noopener">Apache Avro™ 1.8.2 Getting Started (Java)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/24803426" target="_blank" rel="noopener">Avro schema,序列化框架的金领</a></li>
+<li><a href="https://www.iteblog.com/archives/1007.html" target="_blank" rel="noopener">在Hive中使用Avro</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2018/10/15/blog/Bigdata/Apache Avro/">http://beginman.cn/2018/10/15/blog/Bigdata/Apache Avro/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/序列化/">序列化</a>
+            
+              <a href="/tags/avro/">avro</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/10/15/blog/Bigdata/spark/trips/">
+        <span class="next-text nav-default">spark trips</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="hive权限控制">
+
+
+
+
+  <meta name="keywords" content="hive, hue, DataLimbo">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="DataLimbo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="http://beginman.cn/2018/10/15/blog/Bigdata/hive/hive权限/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> hive权限控制 - DataLimbo </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">DataLimbo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">DataLimbo</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          hive权限控制
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-10-15
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/hive/">hive</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-多用户启动hive"><span class="toc-text">1.多用户启动hive</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-非管理员身份"><span class="toc-text">1.1 非管理员身份</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Hive用户对底层文件的权限"><span class="toc-text">1.Hive用户对底层文件的权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Hive自身权限"><span class="toc-text">2. Hive自身权限</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>hive权限控制主要是底层HDFS和hive自身对表的授权管理。</p>
+<h3 id="1-多用户启动hive"><a href="#1-多用户启动hive" class="headerlink" title="1.多用户启动hive"></a>1.多用户启动hive</h3><h4 id="1-1-非管理员身份"><a href="#1-1-非管理员身份" class="headerlink" title="1.1 非管理员身份"></a>1.1 非管理员身份</h4><p>如以当前登录的用户进入hive cli，报错了，提示没有权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hive</span><br><span class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.RuntimeException: java.io.IOException: Permission denied</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>解决办法，这个主要是由于hive配置文件中配置的一些临时或存放中间结果的目录权限设置问题，导致当前登陆hive的用户没权限访</p>
+</blockquote>
+<p>主要涉及如下两个参数:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.exec.scratchdir<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://hadoop-master:9000/opt/tmp/hive<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>HDFS root scratch dir for Hive jobs which gets created with write all (733) permission. For each connecting user, an HDFS scratch dir: $&#123;hive</span><br><span class="line">.exec.scratchdir&#125;;username is created, with $&#123;hive.scratch.dir.permission&#125;<span class="tag">&lt;/<span class="name">description</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  </span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.exec.local.scratchdir<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/opt/tmp/hive_scratchdir<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>Local scratch space for Hive jobs<span class="tag">&lt;/<span class="name">description</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>需要修改对应的hdfs和本地两个目录的权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hdfs </span></span><br><span class="line">hdfs dfs -ls /opt/tmp/hive</span><br><span class="line">drwx------   - hadoop     supergroup          0 2018-10-13 23:23 /opt/tmp/hive/hadoop</span><br><span class="line">drwx------   - hue        supergroup          0 2017-12-08 20:47 /opt/tmp/hive/hue</span><br><span class="line">drwx------   - root       supergroup          0 2018-09-19 16:50 /opt/tmp/hive/root</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地</span></span><br><span class="line">ll /opt/tmp/hive_scratchdir</span><br><span class="line">total 16</span><br><span class="line">drwx------ 2 hadoop hadoop 4096 Nov 15  2017 164dc4ef-1442-4c67-b1e4-6c4f48f93fa8</span><br><span class="line">drwx------ 2 hadoop hadoop 4096 Oct 13 20:47 42d5af9a-ecb1-4708-92fa-176ba0ca8b30</span><br><span class="line">drwx------ 2 hadoop hadoop 4096 Oct 13 23:24 b54b7bc2-2156-4afa-833a-ee0b69e5c687</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop    0 Oct 13 23:23 b54b7bc2-2156-4afa-833a-ee0b69e5c6875489728272456121679.pipeout</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>修改为666即可，<strong>注意路径上的所有父目录路径也要有相应的访问权限!!!</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -chmod -R 755 /opt</span><br><span class="line">hdfs dfs -chmod -R 777 /tmp/hadoop-yarn/</span><br><span class="line"></span><br><span class="line">chmod -R 777 /opt/tmp</span><br></pre></td></tr></table></figure>
+<p>同理参考：<a href="https://my.oschina.net/MIKEWOO/blog/1542194" target="_blank" rel="noopener">Hadoop 2.7.x Permission denied: user=dr.who, access=READ_EXECUTE, inode=”/tmp”问题解决</a></p>
+<p>以管理员身份启动hive:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive -hiveconf hive.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
+<h3 id="1-Hive用户对底层文件的权限"><a href="#1-Hive用户对底层文件的权限" class="headerlink" title="1.Hive用户对底层文件的权限"></a>1.Hive用户对底层文件的权限</h3><p>hive用户对底层文件的访问权限，主要通过设置3个参数完成:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.files.umask.values<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>0022<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>当hive在hdfs上创建文件时，对应的默认掩码。此处的0022,第一个0表示八进制；剩下的022用二进制表示即000010010，然后取反得111101101，即rwxr-xr-x，这样其他用户登录hive或hdfs时候，就没权限删除该文件<span class="tag">&lt;/<span class="name">description</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  </span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.metastore.authorization.storage.checks<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>就是配合hive.files.umask.values参数做权限控制.<span class="tag">&lt;/<span class="name">description</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  </span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.metastore.execute.setugi<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>简单说就是，hadoop在非安全模式（未使用kerborers认证）时，使用hive客户端进程对应的用户和组权限操作hdfs<span class="tag">&lt;/<span class="name">description</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>已经在阿里EMR Hive配置上添加了该参数(<em>需要重启hive</em>)</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fw70q88zebj30jf04gglt.jpg" alt="image-20181013233515532"></p>
+<p>通过以上配置，进入hive的用户就不能随意对底层文件随意操作了，必须具有相应权限。接下来可以进行hive自身类似mysql一样的权限授权管理了</p>
+<h3 id="2-Hive自身权限"><a href="#2-Hive自身权限" class="headerlink" title="2. Hive自身权限"></a>2. Hive自身权限</h3><p>开启权限</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span>   </span><br><span class="line">   <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.security.authorization.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span>   </span><br><span class="line">   <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span>   </span><br><span class="line">   <span class="tag">&lt;<span class="name">description</span>&gt;</span>开启权限验证<span class="tag">&lt;/<span class="name">description</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span>   </span><br><span class="line">   <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.security.authorization.createtable.owner.grants<span class="tag">&lt;/<span class="name">name</span>&gt;</span>   </span><br><span class="line">   <span class="tag">&lt;<span class="name">value</span>&gt;</span>ALL<span class="tag">&lt;/<span class="name">value</span>&gt;</span>   </span><br><span class="line">   <span class="tag">&lt;<span class="name">description</span>&gt;</span>表的创建者对表拥有所有权限<span class="tag">&lt;/<span class="name">description</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>hive授权核心：</p>
+<ul>
+<li>用户</li>
+<li>组</li>
+<li>角色</li>
+</ul>
+<p>举例：</p>
+<table>
+<thead>
+<tr>
+<th>用户</th>
+<th>组</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>G_db1</td>
+<td>可访问db1</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>G_db2</td>
+<td>可访问db2</td>
+</tr>
+<tr>
+<td>王五</td>
+<td>G_bothdb</td>
+<td>可访问db1,db2</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2018/10/15/blog/Bigdata/hive/hive权限/">http://beginman.cn/2018/10/15/blog/Bigdata/hive/hive权限/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/hive/">hive</a>
+            
+              <a href="/tags/hue/">hue</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/10/15/blog/Bigdata/hive/hive管理/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">hive管理</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/10/15/blog/Java/文件读取/">
+        <span class="next-text nav-default">java resource读取</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:pythonsuper@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/beginman" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">BeginMan</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

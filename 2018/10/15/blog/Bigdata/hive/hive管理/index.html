@@ -17,8 +17,12 @@
 
 
 
+  <meta name="description" content="hive管理">
 
 
+
+
+  <meta name="keywords" content="hive, hue, DataLimbo">
 
 
 
@@ -38,7 +42,7 @@
 
 
 
-<link rel="canonical" href="http://beginman.cn/archives/2017/08/">
+<link rel="canonical" href="http://beginman.cn/2018/10/15/blog/Bigdata/hive/hive管理/">
 
 
 
@@ -86,11 +90,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
 </script>
 
-    <title>
-  
-    归档 - DataLimbo
-  
-</title>
+    <title> hive管理 - DataLimbo </title>
   </head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -220,59 +220,115 @@
           <div id="content" class="content">
             
   
-  
-  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          hive管理
+        
+      </h1>
 
-  <section id="archive" class="archive">
-    
-      
-        <div class="archive-title">
-          <span class="archive-post-counter">
-            目前共计 16 篇日志
+      <div class="post-meta">
+        <span class="post-time">
+          2018-10-15
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/hive/">hive</a>
+            
           </span>
-        </div>
+        
+        
+      </div>
+    </header>
+
+    
+    
+
+
+    <div class="post-content">
+      
+        <p>metastore启动脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cat hive-metastore.sh</span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 添加metastore启动脚本</span></span><br><span class="line"></span><br><span class="line">nohup ./hive --service metastore &gt;&gt; metastore.log 2&gt;&amp;1 &amp;</span><br><span class="line"><span class="built_in">echo</span> $! &gt; hive-metastore.pid</span><br></pre></td></tr></table></figure>
+<p>hiveserver2启动脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat hive-server.sh</span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#添加hive server启动脚本</span></span><br><span class="line">nohup ./hive --service hiveserver2 &gt;&gt; hiveserver2.log 2&gt;&amp;1 &amp;</span><br><span class="line"><span class="built_in">echo</span> $! &gt; hiveserver2.pid</span><br></pre></td></tr></table></figure>
+<p>启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./hive-metastore.sh</span><br><span class="line">./hive-server.sh</span><br></pre></td></tr></table></figure>
+<p>未完待续…</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://beginman.cn">BeginMan</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://beginman.cn/2018/10/15/blog/Bigdata/hive/hive管理/">http://beginman.cn/2018/10/15/blog/Bigdata/hive/hive管理/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
       
     
 
     
-      
+      <footer class="post-footer">
         
-        
-
-        
-          
-          <div class="collection-title">
-            <h2 class="archive-year">2017</h2>
+          <div class="post-tags">
+            
+              <a href="/tags/hive/">hive</a>
+            
+              <a href="/tags/hue/">hue</a>
+            
           </div>
         
-      
-
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            08-23
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2017/08/23/the-guide-for-pandas/" class="archive-post-link">
-            Pandas 入门指南
-          </a>
-        </span>
-      </div>
+        
+        
+  <nav class="post-nav">
     
-  </section>
-
-  
-  <nav class="pagination">
+      <a class="prev" href="/2018/10/15/blog/Bigdata/spark/trips/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">spark trips</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
     
+    
+      <a class="next" href="/2018/10/15/blog/Bigdata/hive/hive权限/">
+        <span class="next-text nav-default">hive权限控制</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
     
   </nav>
 
 
+      </footer>
+    
+
+  </article>
 
 
           </div>
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
       </main>
@@ -357,6 +413,11 @@
     </div>
 
     
+  
+  
+
+  
+
 
 
     
